@@ -4,10 +4,16 @@
 
 .axis line {
   fill: none;
+  opacity: 0.5;
 }
 
 .axis text {
   font: sans-serif;
+}
+
+.axis-label {
+  font-size: 1.1em;
+  fill: #635F5D;
 }
 
 
