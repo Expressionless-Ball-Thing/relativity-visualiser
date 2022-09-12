@@ -23,19 +23,19 @@ const App = () => {
   const [events, setEvents] = useState([
     {
       id: 0,
-      name: "",
+      name: "You",
       x: 0,
       t: 0,
     },
     {
       id: 1,
-      name: "",
+      name: "event",
       x: 1,
       t: 1,
     },
     {
       id: 2,
-      name: "",
+      name: "another event",
       x: -1,
       t: 2,
     }
