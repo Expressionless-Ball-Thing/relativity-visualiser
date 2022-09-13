@@ -27,6 +27,14 @@
   stroke-width: 2;
 }
 
+.tooltip {
+  border: 1px solid black;
+  opacity: 1;
+  background: white;
+  font-size: 11px;
+  text-align: left;
+  box-shadow: 10px 10px 8px #888888;
+}
 
 /*
 

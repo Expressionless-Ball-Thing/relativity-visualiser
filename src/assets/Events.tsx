@@ -1,5 +1,19 @@
-import { interpolateInferno, scaleSequential, select } from "d3";
-import React from "react";
+import { schemePaired } from "d3";
+import React, { useState } from "react";
+
+const colorScale = schemePaired;
+
+const Tooltip = ({ x, t, name }) => (
+  <foreignObject x={x + 10} y={t + 10} width={100} height={100}>
+    <div className="tooltip">
+      <strong>{name}</strong>
+      <br/>
+      x: {Math.round(x)}
+      <br/>
+      t: {Math.round(t)}
+    </div>
+  </foreignObject>
+);
 
 const Events = ({
   events,
@@ -8,37 +22,52 @@ const Events = ({
   clickedEvent,
   setClickedEvent,
 }) => {
+  const [tooltip, setTooltip] = useState<object | boolean>(false);
+
   const mouseover = (event: object) => {
     event.target.style.stroke = "black";
     event.target.style.strokeWidth = 2;
   };
 
   const mouseleave = (event: object) => {
-    event.target.style = ""
+    event.target.style = "";
   };
 
   const click = (event: object) => {
-    setClickedEvent(parseInt(event.target.id))
-  }
+    setClickedEvent(parseInt(event.target.id));
+  };
 
-  let circles = events.map((event: object) => {
-    return (
-      <circle
-        id={event.id}
-        key={event.id}
-        className={`node ${(event.id === clickedEvent) ? "selected" : ""}`}
-        fill="red"
-        cx={SpaceScale(event.x)}
-        cy={TimeScale(event.t)}
-        r={5}
-        onMouseOver={mouseover}
-        onMouseLeave={mouseleave}
-        onClick={click}
-      ></circle>
-    );
-  });
-
-  return circles;
+  return (
+    <>
+      {events.map((event: object) => (
+        <circle
+          id={event.id}
+          key={event.id}
+          className={`node ${event.id === clickedEvent ? "selected" : ""}`}
+          fill={`${colorScale[event.id % colorScale.length]}`}
+          cx={SpaceScale(event.x)}
+          cy={TimeScale(event.t)}
+          r={5}
+          onMouseOver={() => {
+            setTooltip(event);
+            mouseover;
+          }}
+          onMouseLeave={() => {
+            setTooltip(false);
+            mouseleave;
+          }}
+          onClick={click}
+        />
+      ))}
+      {tooltip && (
+        <Tooltip
+          x={SpaceScale(tooltip.x)}
+          t={TimeScale(tooltip.t)}
+          name={tooltip.name}
+        />
+      )}
+    </>
+  );
 };
 
 export default Events;
