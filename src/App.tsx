@@ -1,6 +1,6 @@
 import "./App.css";
 import { scaleLinear } from "d3";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TimeAxis from "./assets/TimeAxis";
 import SpaceAxis from "./assets/SpaceAxis";
 import Events from "./assets/Events";
@@ -39,6 +39,21 @@ const App = () => {
       t: 2,
     },
   ]);
+
+
+
+  const handleKeyDown = (event) => {
+    event.preventDefault()
+    if (["Backspace", "Delete"].includes(event.key)) {
+      setEvents(events.filter((event) => (event.id !== clickedEvent)))
+    }
+  }
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  })
 
   return (
     <div className="App">
