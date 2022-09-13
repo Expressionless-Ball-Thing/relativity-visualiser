@@ -8,7 +8,8 @@ import Events from "./assets/Events";
 const width: number = 940;
 const height: number = 940;
 const margin = { top: 20, right: 20, bottom: 20, left: 20 };
-
+const innerHeight = height - margin.top - margin.bottom;
+const innerWidth = width - margin.left - margin.right;
 const SpaceScale = scaleLinear()
   .domain([5, -5])
   .range([width - margin.right, margin.left]);
@@ -17,9 +18,7 @@ const TimeScale = scaleLinear()
   .range([height - margin.bottom, margin.top]);
 
 const App = () => {
-  const innerHeight = height - margin.top - margin.bottom;
-  const innerWidth = width - margin.left - margin.right;
-
+  const [clickedEvent, setClickedEvent] = useState(NaN);
   const [events, setEvents] = useState([
     {
       id: 0,
@@ -38,7 +37,7 @@ const App = () => {
       name: "another event",
       x: -1,
       t: 2,
-    }
+    },
   ]);
 
   return (
@@ -58,7 +57,13 @@ const App = () => {
           margin={margin}
           innerHeight={innerHeight}
         />
-        <Events events={events} SpaceScale={SpaceScale} TimeScale={TimeScale}/>
+        <Events
+          events={events}
+          SpaceScale={SpaceScale}
+          TimeScale={TimeScale}
+          clickedEvent={clickedEvent}
+          setClickedEvent={setClickedEvent}
+        />
       </svg>
     </div>
   );
