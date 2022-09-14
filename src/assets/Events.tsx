@@ -48,13 +48,13 @@ const Events = ({
           cx={SpaceScale(event.x)}
           cy={TimeScale(event.t)}
           r={5}
-          onMouseOver={() => {
+          onMouseOver={(component: object) => {
             setTooltip(event);
-            mouseover;
+            mouseover(component);
           }}
-          onMouseLeave={() => {
+          onMouseLeave={(component: object) => {
             setTooltip(false);
-            mouseleave;
+            mouseleave(component);
           }}
           onClick={click}
         />
