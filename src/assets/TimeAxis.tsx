@@ -20,7 +20,7 @@ const TimeAxis = ({ height, width, margin, TimeScale, innerHeight }): JSX.Elemen
       <text
         className="axis-label"
         textAnchor="middle"
-        transform={`translate(${-20}, ${innerHeight / 8 - 50}) rotate(-90)`}
+        transform={`translate(${-20}, ${innerHeight / 4 - 50}) rotate(-90)`}
       >
         Y(seconds)
       </text>

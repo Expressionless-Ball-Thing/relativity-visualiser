@@ -5,8 +5,8 @@ import TimeAxis from "./assets/TimeAxis";
 import SpaceAxis from "./assets/SpaceAxis";
 import Events from "./assets/Events";
 
-const width: number = 940;
-const height: number = 940;
+const width: number = 650;
+const height: number = 650;
 const margin = { top: 20, right: 20, bottom: 20, left: 20 };
 const innerHeight = height - margin.top - margin.bottom;
 const innerWidth = width - margin.left - margin.right;
@@ -59,6 +59,15 @@ const App = () => {
 
   return (
     <div className="App">
+      <div className="ToolBar">
+        <text className="control_label type">Type:</text>
+        <label className="label_type">N/A</label>
+        <text className="control_label input_label">Event Name:</text>
+        <input type="text" />
+        <button className="delete" name="delete"></button>
+        <text className="control_label Add_event">Add Event:</text>
+        <input type="checkbox" name="add"/>
+      </div>
       <svg width={width} height={height} className="visualiser">
         <SpaceAxis
           SpaceScale={SpaceScale}
