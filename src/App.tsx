@@ -18,7 +18,7 @@ const TimeScale = scaleLinear()
   .range([height - margin.bottom, margin.top]);
 
 const App = () => {
-  const [clickedEvent, setClickedEvent] = useState(NaN);
+  const [clickedEvent, setClickedEvent] = useState({});
   const [events, setEvents] = useState([
     {
       id: 0,
@@ -46,6 +46,7 @@ const App = () => {
       setEvents(events.filter((event) => event.id !== clickedEvent));
     }
   };
+
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => {
@@ -62,7 +63,7 @@ const App = () => {
         </div>
         <div className="Namebar">
           <text className="control_label input_label">Event Name:</text>
-          <input type="text" />
+          <input type="text" placeholder={clickedEvent.name}/>
           <button className="delete" name="delete">
             delete
           </button>
