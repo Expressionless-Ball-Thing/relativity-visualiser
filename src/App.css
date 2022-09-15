@@ -35,6 +35,14 @@
   box-shadow: 10px 10px 8px #888888;
 }
 
+
+.ToolBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
 .control_label {
   font-size: 13px;
   color: blue;
@@ -44,7 +52,7 @@
 
 .label_type {
   display: inline-block;
-  width: 80px;
+  width: 60px;
 }
 
 

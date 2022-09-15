@@ -40,33 +40,37 @@ const App = () => {
     },
   ]);
 
-
-
   const handleKeyDown = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     if (["Backspace", "Delete"].includes(event.key)) {
-      setEvents(events.filter((event) => (event.id !== clickedEvent)))
+      setEvents(events.filter((event) => event.id !== clickedEvent));
     }
-  }
+  };
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  })
-
-
+  });
 
   return (
     <div className="App">
       <div className="ToolBar">
-        <text className="control_label type">Type:</text>
-        <label className="label_type">N/A</label>
-        <text className="control_label input_label">Event Name:</text>
-        <input type="text" />
-        <button className="delete" name="delete"></button>
-        <text className="control_label Add_event">Add Event:</text>
-        <input type="checkbox" name="add"/>
+        <div className="Typebar">
+          <text className="control_label type">Type:</text>
+          <label className="label_type">N/A</label>
+        </div>
+        <div className="Namebar">
+          <text className="control_label input_label">Event Name:</text>
+          <input type="text" />
+          <button className="delete" name="delete">
+            delete
+          </button>
+        </div>
+        <div className="Addbar">
+          <text className="control_label Add_event">Add Event:</text>
+          <input type="checkbox" name="add" />
+        </div>
       </div>
       <svg width={width} height={height} className="visualiser">
         <SpaceAxis
