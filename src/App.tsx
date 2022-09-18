@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import TimeAxis from "./assets/TimeAxis";
 import SpaceAxis from "./assets/SpaceAxis";
 import Events from "./assets/Events";
+import ToolBar from "./assets/Toolbar";
+
 
 const width: number = 650;
 const height: number = 650;
@@ -40,10 +42,14 @@ const App = () => {
     },
   ]);
 
+  const deleteEvent = () => {
+    setEvents(events.filter((event) => (event.id !== clickedEvent.id)))
+  }
+
   const handleKeyDown = (event) => {
     event.preventDefault();
     if (["Backspace", "Delete"].includes(event.key)) {
-      setEvents(events.filter((event) => event.id !== clickedEvent));
+      deleteEvent();
     }
   };
 
@@ -56,23 +62,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <div className="ToolBar">
-        <div className="Typebar">
-          <text className="control_label type">Type:</text>
-          <label className="label_type">N/A</label>
-        </div>
-        <div className="Namebar">
-          <text className="control_label input_label">Event Name:</text>
-          <input type="text" placeholder={clickedEvent.name}/>
-          <button className="delete" name="delete">
-            delete
-          </button>
-        </div>
-        <div className="Addbar">
-          <text className="control_label Add_event">Add Event:</text>
-          <input type="checkbox" name="add" />
-        </div>
-      </div>
+      <ToolBar clickedEvent={clickedEvent} deleteEvent={deleteEvent}/>
       <svg width={width} height={height} className="visualiser">
         <SpaceAxis
           SpaceScale={SpaceScale}
