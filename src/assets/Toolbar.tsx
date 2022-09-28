@@ -1,7 +1,7 @@
 import React from "react";
 
 const ToolBar = ({clickedEvent, deleteEvent}) => {
-
+  
   return (
     <div className="ToolBar">
       <div className="Typebar">
@@ -10,7 +10,9 @@ const ToolBar = ({clickedEvent, deleteEvent}) => {
       </div>
       <div className="Namebar">
         <text className="control_label input_label">Event Name:</text>
-        <input type="text" placeholder={clickedEvent.name}/>
+
+        <input type="text" id="name" placeholder={clickedEvent.name}/>
+
         <button className="delete" name="delete" onClick={deleteEvent}>
           delete
         </button>
