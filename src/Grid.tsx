@@ -29,17 +29,32 @@ export const Grid = ({
     };
   });
 
-  const handleClick = (event) => {
+  const addEvent = (event) => {
     let currentTargetRect = event.currentTarget.getBoundingClientRect();
+    let left = event.clientX - currentTargetRect.left;
+    let top = event.clientY - currentTargetRect.top
+    if (left < margin.left || left > width - margin.right || top < margin.top || top > height - margin.bottom) return;
     const newEvent = {
       id: events[events.length - 1].id + 1,
       name: "newevent",
-      x: SpaceScale.invert(event.clientX - currentTargetRect.left),
-      t: TimeScale.invert(event.clientY - currentTargetRect.top),
+      x: SpaceScale.invert(left),
+      t: TimeScale.invert(top),
     };
     const tempEvent = [...events];
     tempEvent.push(newEvent);
     setEvents(tempEvent);
+  }
+
+  const handleClick = (event) => {
+    switch (event.detail) {
+      case 1:
+        
+      case 2:
+        addEvent(event);
+        break;
+      default:
+        break;
+    }
   };
 
   const deleteEvent = () => {
