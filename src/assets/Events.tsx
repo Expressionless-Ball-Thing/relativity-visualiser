@@ -18,9 +18,9 @@ const Events = ({
       <div className="tooltip">
         <strong>{eventdata.name}</strong>
         <br/>
-        x: {Math.round(eventdata.x)}
+        x: {eventdata.x}
         <br/>
-        t: {Math.round(eventdata.t)}
+        t: {eventdata.t}
       </div>
     </foreignObject>
   )}
