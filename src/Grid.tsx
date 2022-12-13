@@ -1,8 +1,13 @@
 import { scaleLinear } from "d3";
-import { useEffect } from "react";
+import { PropsWithChildren, useEffect } from "react";
+import { EventNode } from "./App";
 import Events from "./assets/Events";
 import { SpaceAxis } from "./assets/SpaceAxis";
 import { TimeAxis } from "./assets/TimeAxis";
+
+export interface Margin {
+  top: number, right: number, bottom: number, left: number
+}
 
 export const Grid = ({
   events,
@@ -52,8 +57,13 @@ export const Grid = ({
     setEvents(tempEvent);
   }
 
-  const handleClick = (event) => {
-      console.log(event.detail)
+  const clickedSomething = (event:Event) => {
+    if (event.target.className !== "node") {
+      setClickedEvent(null);
+    }
+  }
+
+  const handleClick = (event:Event) => {
     switch (event.detail) {
       case 1:
         /* TODO: check if the user clicked on an event, line or nothing.*/
@@ -67,11 +77,11 @@ export const Grid = ({
   };
 
   const deleteEvent = () => {
-    setEvents(events.filter((event) => event.id !== clickedEvent.id));
+    setEvents(events.filter((event: EventNode) => event.id !== clickedEvent.id));
   };
 
   const handleKeyDown = (event) => {
-    event.stopPropagation()
+    if (event.target.id === "Eventname") return;
     if (["Backspace", "Delete"].includes(event.key)) {
       deleteEvent();
     }

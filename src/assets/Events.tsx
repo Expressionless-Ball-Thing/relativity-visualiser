@@ -1,5 +1,6 @@
 import { schemePaired } from "d3";
 import React, { useState } from "react";
+import { EventNode } from "../App";
 
 const colorScale = schemePaired;
 
@@ -37,7 +38,7 @@ const Events = ({
 
   return (
     <>
-      {events.map((event: object) => (
+      {events.map((event: EventNode) => (
         <circle
           id={event.id}
           key={event.id}

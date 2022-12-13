@@ -11,7 +11,7 @@ export const ToolBar = ({ clickedEvent, deleteEvent, updateEvent }) => {
 
         <input
           type="text"
-          id="name"
+          id="Eventname"
           placeholder={clickedEvent.name}
           onChange={updateEvent}
           disabled={clickedEvent === null ? true : false}
@@ -22,7 +22,7 @@ export const ToolBar = ({ clickedEvent, deleteEvent, updateEvent }) => {
         </button>
       </div>
       <div className="Addbar">
-        <span className="control_label Add_event">Add Event:</span>
+        <span className="control_label move_event">Move_Event:</span>
         <input type="checkbox" name="add" />
       </div>
     </div>
