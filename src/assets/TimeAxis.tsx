@@ -1,10 +1,12 @@
+import { ScaleLinear } from "d3";
 import React from "react";
+import { Margin } from "../Grid";
 
-const TimeAxis = ({ height, width, margin, TimeScale, innerHeight }): JSX.Element => {
+export const TimeAxis = ({ height, width, margin, TimeScale, innerHeight} : {height: number, width: number, margin: Margin, TimeScale: ScaleLinear<Number, Number, never>, innerHeight: number}) => {
   return (
     <g className="axis" transform={`translate(${width / 2}, 0)`}>
       <line stroke="black" y1={margin.top} y2={height - margin.bottom} />
-      {TimeScale.ticks().map((tickValue: number) => (
+      {TimeScale.ticks(21).map((tickValue: number) => (
         <g key={tickValue} transform={`translate(0, ${TimeScale(tickValue)})`}>
           <line
             stroke="blue"
@@ -20,12 +22,10 @@ const TimeAxis = ({ height, width, margin, TimeScale, innerHeight }): JSX.Elemen
       <text
         className="axis-label"
         textAnchor="middle"
-        transform={`translate(${-20}, ${innerHeight / 8 - 50}) rotate(-90)`}
+        transform={`translate(${-20}, ${innerHeight / 4 - 50}) rotate(-90)`}
       >
         Y(seconds)
       </text>
     </g>
   );
 };
-
-export default TimeAxis;

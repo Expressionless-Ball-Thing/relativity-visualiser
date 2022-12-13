@@ -1,6 +1,5 @@
 .App {
-  display: flex;
-  justify-content: center;
+  text-align: center;
 }
 
 
@@ -20,6 +19,7 @@
 .axis-label {
   font-size: 1.1em;
   fill: #635F5D;
+  user-select: none;
 }
 
 .selected {
@@ -35,6 +35,30 @@
   text-align: left;
   box-shadow: 10px 10px 8px #888888;
 }
+
+
+.ToolBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.control_label {
+  font-size: 13px;
+  color: blue;
+  margin: auto;
+  display: inline-block;
+}
+
+.label_type {
+  display: inline-block;
+  width: 60px;
+}
+
+
+
+
 
 /*
 

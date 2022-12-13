@@ -1,10 +1,12 @@
-import React from "react";
+import * as d3 from "d3";
+import { ScaleLinear } from "d3";
+import { Margin } from "../Grid";
 
-const SpaceAxis = ({ height, width, margin, SpaceScale, innerWidth }): JSX.Element => {
+export const SpaceAxis = ({ height, width, margin, SpaceScale, innerWidth }: {height: number, width: number, margin: Margin, SpaceScale: ScaleLinear<Number, Number, never>, innerWidth: number}) => {
   return (
     <g className="axis" transform={`translate(0, ${height / 2})`}>
       <line stroke="black" x1={margin.left} x2={width - margin.right} />
-      {SpaceScale.ticks().map((tickValue: number) => (
+      {SpaceScale.ticks(21).map((tickValue: number) => (
         <g key={tickValue} transform={`translate(${SpaceScale(tickValue)}, 0)`}>
           <line
             stroke="blue"
@@ -22,10 +24,8 @@ const SpaceAxis = ({ height, width, margin, SpaceScale, innerWidth }): JSX.Eleme
         textAnchor="middle"
         transform={`translate(${innerWidth - 50} , -5)`}
       >
-        X(metres)
+        X(lightseconds)
       </text>
     </g>
   );
 };
-
-export default SpaceAxis;
