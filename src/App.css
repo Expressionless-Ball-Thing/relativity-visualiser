@@ -19,6 +19,7 @@
 .axis-label {
   font-size: 1.1em;
   fill: #635F5D;
+  user-select: none;
 }
 
 .selected {

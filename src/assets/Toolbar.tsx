@@ -1,7 +1,5 @@
-import React from "react";
 
-const ToolBar = ({clickedEvent, deleteEvent}) => {
-  
+export const ToolBar = ({ clickedEvent, deleteEvent, updateEvent }) => {
   return (
     <div className="ToolBar">
       <div className="Typebar">
@@ -11,18 +9,22 @@ const ToolBar = ({clickedEvent, deleteEvent}) => {
       <div className="Namebar">
         <text className="control_label input_label">Event Name:</text>
 
-        <input type="text" id="name" placeholder={clickedEvent.name}/>
+        <input
+          type="text"
+          id="name"
+          placeholder={clickedEvent.name}
+          onChange={updateEvent}
+          disabled={clickedEvent === null ? true : false}
+        />
 
         <button className="delete" name="delete" onClick={deleteEvent}>
           delete
         </button>
       </div>
       <div className="Addbar">
-        <text className="control_label Add_event">Add Event:</text>
+        <span className="control_label Add_event">Add Event:</span>
         <input type="checkbox" name="add" />
       </div>
     </div>
   );
 };
-
-export default ToolBar;

@@ -1,10 +1,10 @@
 import React from "react";
 
-const TimeAxis = ({ height, width, margin, TimeScale, innerHeight }): JSX.Element => {
+export const TimeAxis = ({ height, width, margin, TimeScale, innerHeight }): JSX.Element => {
   return (
     <g className="axis" transform={`translate(${width / 2}, 0)`}>
       <line stroke="black" y1={margin.top} y2={height - margin.bottom} />
-      {TimeScale.ticks().map((tickValue: number) => (
+      {TimeScale.ticks(21).map((tickValue: number) => (
         <g key={tickValue} transform={`translate(0, ${TimeScale(tickValue)})`}>
           <line
             stroke="blue"
@@ -27,5 +27,3 @@ const TimeAxis = ({ height, width, margin, TimeScale, innerHeight }): JSX.Elemen
     </g>
   );
 };
-
-export default TimeAxis;
