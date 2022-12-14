@@ -20,8 +20,8 @@ export const Grid = ({
   setClickedWorldLine
 }) => {
 
-  const width: number = 650;
-  const height: number = 650;
+  const width: number = 1000;
+  const height: number = 1000;
   const margin = { top: 20, right: 20, bottom: 20, left: 20 };
   const SpaceScale = scaleLinear()
     .domain([10, -10])
@@ -76,6 +76,7 @@ export const Grid = ({
   };
 
   const handleKeyDown = (event) => {
+    //Temp hack solution so that the keydown won't trigger in the input box.
     if (event.target.id === "Eventname") return;
     if (["Backspace", "Delete"].includes(event.key)) {
       deleteEvent();

@@ -15,9 +15,12 @@ export interface WorldLine {
   target: EventNode;
 }
 
+type Mode = 'idle' | 'dragLine' | 'dragEvent'
+
 const App = () => {
   const [clickedEvent, setClickedEvent] = useState<EventNode | boolean>(false);
   const [clickedWorldLine, setClickedWorldLine] = useState<WorldLine | boolean>(false);
+  const [mode, setMode] = useState<Mode>("idle");
   const [events, setEvents] = useState<EventNode[]>([
     {id: 0, name: "You", x: 0, t: 0},
     {id: 1, name: "event", x: 4, t: 4},

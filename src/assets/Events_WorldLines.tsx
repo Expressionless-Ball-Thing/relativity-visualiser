@@ -18,7 +18,6 @@ const Events_WorldLines = ({
 
   const EventRef = useRef(null);
 
-
   /*
   const Tooltip = (eventdata : WorldLine| EventNode) => {
 
@@ -44,26 +43,30 @@ const Events_WorldLines = ({
   */
 
   const mouseoverEvent = (event: object, component) => {
+    event.stopPropagation()
     setTooltip(component);
     event.target.style.stroke = "black";
     event.target.style.strokeWidth = 2;
     document.body.style.cursor = "pointer";
   };
 
-  const mouseleaveEvent = (event) => {
+  const mouseleaveEvent = (event: Event) => {
+    event.stopPropagation()
     setTooltip(false);
     event.target.style = "";
     document.body.style.cursor = "";
   };
 
-  const mouseoverWorldLine = (event: object, component) => {
+  const mouseoverWorldLine = (event: Event, component) => {
+    event.stopPropagation()
     setTooltip(component);
     event.target.style.stroke = "red";
     event.target.style.strokeWidth = 2;
     document.body.style.cursor = "pointer";
   };
 
-  const mouseleaveWorldLine = (event) => {
+  const mouseleaveWorldLine = (event: Event) => {
+    event.stopPropagation()
     setTooltip(false);
     event.target.style = "";
     document.body.style.cursor = "";
