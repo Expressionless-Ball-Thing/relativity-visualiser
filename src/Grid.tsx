@@ -19,8 +19,6 @@ export const Grid = ({
   const width: number = 650;
   const height: number = 650;
   const margin = { top: 20, right: 20, bottom: 20, left: 20 };
-  const innerHeight = height - margin.top - margin.bottom;
-  const innerWidth = width - margin.left - margin.right;
   const SpaceScale = scaleLinear()
     .domain([10, -10])
     .range([width - margin.right, margin.left]);
@@ -41,15 +39,15 @@ export const Grid = ({
     let top = event.clientY - currentTargetRect.top
     if (left < margin.left || left > width - margin.right || top < margin.top || top > height - margin.bottom) return;
 
-    let lastnodeId = events.reduce(function(acc, currevent){
+    let lastnodeId = events.reduce(function(acc: number, currevent : EventNode){
       return currevent.id > acc ? currevent.id : acc;
     }, 0);
 
     const newEvent = {
       id: lastnodeId + 1,
       name: "",
-      x: SpaceScale.invert(left),
-      t: TimeScale.invert(top),
+      x: Math.round(SpaceScale.invert(left) * 10) / 10,
+      t: Math.round(TimeScale.invert(top) * 10) / 10,
     };
     const tempEvent = [...events];
     tempEvent.push(newEvent);
@@ -63,7 +61,7 @@ export const Grid = ({
     }
   }
 
-  const handleClick = (event:Event) => {
+  const handleClick = (event) => {
     switch (event.detail) {
       case 1:
         /* TODO: check if the user clicked on an event, line or nothing.*/
@@ -91,22 +89,22 @@ export const Grid = ({
     <svg
       width={width}
       height={height}
-      className="visualiser"
+      id="visualiser"
       onClick={handleClick}
+      onMouseOver={() => document.body.style.cursor = "crosshair"}
+      onMouseLeave={() => document.body.style.cursor = ""}
     >
       <SpaceAxis
         SpaceScale={SpaceScale}
         height={height}
         width={width}
         margin={margin}
-        innerWidth={innerWidth}
       />
       <TimeAxis
         TimeScale={TimeScale}
         height={height}
         width={width}
         margin={margin}
-        innerHeight={innerHeight}
       />
       <Events
         events={events}

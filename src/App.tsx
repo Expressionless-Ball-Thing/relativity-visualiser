@@ -10,6 +10,11 @@ export interface EventNode {
   t: number;
 }
 
+export interface WorldLine {
+  source: EventNode;
+  target: EventNode;
+}
+
 const App = () => {
   const [clickedEvent, setClickedEvent] = useState<EventNode>({});
   const [events, setEvents] = useState<EventNode[]>([
@@ -17,6 +22,10 @@ const App = () => {
     {id: 1, name: "event", x: 1, t: 1},
     {id: 2, name: "another event", x: -1, t: 2}
   ]);
+  const [worldlines, setWorldlines] = useState<WorldLine[]>([
+    {source: events[0], target: events[1]},
+    {source: events[1], target: events[2]}
+  ])
 
   const deleteEvent = () => {
     console.log("hey")

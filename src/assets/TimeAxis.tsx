@@ -2,7 +2,7 @@ import { ScaleLinear } from "d3";
 import React from "react";
 import { Margin } from "../Grid";
 
-export const TimeAxis = ({ height, width, margin, TimeScale, innerHeight} : {height: number, width: number, margin: Margin, TimeScale: ScaleLinear<Number, Number, never>, innerHeight: number}) => {
+export const TimeAxis = ({ height, width, margin, TimeScale} : {height: number, width: number, margin: Margin, TimeScale: ScaleLinear<Number, Number, never>}) => {
   return (
     <g className="axis" transform={`translate(${width / 2}, 0)`}>
       <line stroke="black" y1={margin.top} y2={height - margin.bottom} />
@@ -22,7 +22,7 @@ export const TimeAxis = ({ height, width, margin, TimeScale, innerHeight} : {hei
       <text
         className="axis-label"
         textAnchor="middle"
-        transform={`translate(${-20}, ${innerHeight / 4 - 50}) rotate(-90)`}
+        transform={`translate(${-20}, ${(height - margin.top - margin.bottom) / 4 - 50}) rotate(-90)`}
       >
         Y(seconds)
       </text>

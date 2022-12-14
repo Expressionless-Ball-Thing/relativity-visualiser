@@ -7,7 +7,7 @@ export const ToolBar = ({ clickedEvent, deleteEvent, updateEvent }) => {
         <label className="label_type">N/A</label>
       </div>
       <div className="Namebar">
-        <text className="control_label input_label">Event Name:</text>
+        <div className="control_label input_label">Event Name:</div>
 
         <input
           type="text"
@@ -22,7 +22,7 @@ export const ToolBar = ({ clickedEvent, deleteEvent, updateEvent }) => {
         </button>
       </div>
       <div className="Addbar">
-        <span className="control_label move_event">Move_Event:</span>
+        <span className="control_label move_event">Move Event:</span>
         <input type="checkbox" name="add" />
       </div>
     </div>
