@@ -22,6 +22,10 @@
   user-select: none;
 }
 
+.tick-label {
+  font-size: 0.7em;
+}
+
 .selected {
   stroke: black;
   stroke-width: 2;

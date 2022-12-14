@@ -1,7 +1,7 @@
 import { scaleLinear } from "d3";
 import { PropsWithChildren, useEffect } from "react";
-import { EventNode } from "./App";
-import Events from "./assets/Events";
+import { EventNode, WorldLine } from "./App";
+import Events_WorldLines from "./assets/Events_WorldLines";
 import { SpaceAxis } from "./assets/SpaceAxis";
 import { TimeAxis } from "./assets/TimeAxis";
 
@@ -14,6 +14,8 @@ export const Grid = ({
   clickedEvent,
   setClickedEvent,
   setEvents,
+  setWorldlines,
+  worldlines
 }) => {
 
   const width: number = 650;
@@ -55,17 +57,8 @@ export const Grid = ({
     setEvents(tempEvent);
   }
 
-  const clickedSomething = (event:Event) => {
-    if (event.target.className !== "node") {
-      setClickedEvent(null);
-    }
-  }
-
   const handleClick = (event) => {
     switch (event.detail) {
-      case 1:
-        /* TODO: check if the user clicked on an event, line or nothing.*/
-        break;
       case 2:
         addEvent(event);
         break;
@@ -76,6 +69,8 @@ export const Grid = ({
 
   const deleteEvent = () => {
     setEvents(events.filter((event: EventNode) => event.id !== clickedEvent.id));
+    setWorldlines(worldlines.filter((event: WorldLine) => event.source !== clickedEvent && event.target !== clickedEvent))
+    setClickedEvent(false)
   };
 
   const handleKeyDown = (event) => {
@@ -106,8 +101,9 @@ export const Grid = ({
         width={width}
         margin={margin}
       />
-      <Events
+      <Events_WorldLines
         events={events}
+        worldlines={worldlines}
         SpaceScale={SpaceScale}
         TimeScale={TimeScale}
         clickedEvent={clickedEvent}

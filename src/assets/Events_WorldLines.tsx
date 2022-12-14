@@ -3,8 +3,9 @@ import { useEffect, useRef, useState } from "react";
 
 const colorScale = d3.schemePaired;
 
-const Events = ({
+const Events_WorldLines = ({
   events,
+  worldlines,
   SpaceScale,
   TimeScale,
   clickedEvent,
@@ -48,6 +49,18 @@ const Events = ({
 
   useEffect(() => {
     const svg = d3.select(EventRef.current);
+    console.log(worldlines)
+    svg.selectAll(".worldline")
+      .data(worldlines)
+      .join("line")
+      .classed("worldline", true)
+      .attr("x1", d => SpaceScale(d.source.x))
+      .attr("y1", d => TimeScale(d.source.t))
+      .attr("x2", d => SpaceScale(d.target.x))
+      .attr("y2", d => TimeScale(d.target.t))
+      .style("stroke-width", `1.5px`)
+      .style("stroke", "#000000");
+
     svg
       .selectAll(".node")
       .data(events)
@@ -72,4 +85,4 @@ const Events = ({
   );
 };
 
-export default Events;
+export default Events_WorldLines;

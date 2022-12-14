@@ -16,7 +16,7 @@ export interface WorldLine {
 }
 
 const App = () => {
-  const [clickedEvent, setClickedEvent] = useState<EventNode>({});
+  const [clickedEvent, setClickedEvent] = useState<EventNode | boolean>(false);
   const [events, setEvents] = useState<EventNode[]>([
     {id: 0, name: "You", x: 0, t: 0},
     {id: 1, name: "event", x: 1, t: 1},
@@ -48,9 +48,10 @@ const App = () => {
       <ToolBar clickedEvent={clickedEvent} deleteEvent={deleteEvent} updateEvent={updateEventName}/>
       <Grid
         events={events}
+        worldlines={worldlines}
         clickedEvent={clickedEvent}
         setClickedEvent={setClickedEvent}
-        setEvents={setEvents}/>
+        setEvents={setEvents} setWorldlines={setWorldlines}/>
     </div>
   );
 };

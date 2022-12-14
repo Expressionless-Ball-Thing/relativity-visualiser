@@ -14,7 +14,7 @@ export const ToolBar = ({ clickedEvent, deleteEvent, updateEvent }) => {
           id="Eventname"
           placeholder={clickedEvent.name}
           onChange={updateEvent}
-          disabled={clickedEvent === null ? true : false}
+          disabled={clickedEvent === false ? true : false}
         />
 
         <button className="delete" name="delete" onClick={deleteEvent}>

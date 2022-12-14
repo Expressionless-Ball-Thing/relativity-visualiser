@@ -13,7 +13,7 @@ export const SpaceAxis = ({ height, width, margin, SpaceScale}: {height: number,
             y1={((height - (margin.top + margin.bottom)) / 2) * -1}
             y2={(width - (margin.top + margin.bottom)) / 2}
           />
-          <text style={{ textAnchor: "middle" }} dy="1em" dx=".5em">
+          <text style={{ textAnchor: "middle" }} dy="1em" dx=".5em" className="tick-label">
             {tickValue === 0 ? "" : tickValue}
           </text>
         </g>

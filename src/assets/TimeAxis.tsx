@@ -13,7 +13,7 @@ export const TimeAxis = ({ height, width, margin, TimeScale} : {height: number, 
             x1={((width - (margin.left + margin.right)) / 2) * -1}
             x2={(width - (margin.left + margin.right)) / 2}
           />
-          <text textAnchor="middle" dy="1em" dx=".5em">
+          <text textAnchor="middle" dy="1em" dx=".5em" className="tick-label">
             {tickValue === 0 ? "" : tickValue}
           </text>
         </g>
