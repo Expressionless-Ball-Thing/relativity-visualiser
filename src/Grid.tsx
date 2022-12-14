@@ -15,7 +15,9 @@ export const Grid = ({
   setClickedEvent,
   setEvents,
   setWorldlines,
-  worldlines
+  worldlines,
+  clickedWorldLine,
+  setClickedWorldLine
 }) => {
 
   const width: number = 650;
@@ -108,6 +110,8 @@ export const Grid = ({
         TimeScale={TimeScale}
         clickedEvent={clickedEvent}
         setClickedEvent={setClickedEvent}
+        clickedWorldLine={clickedWorldLine}
+        setClickedWorldLine={setClickedWorldLine}
       />
     </svg>
   );

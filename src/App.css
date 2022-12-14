@@ -14,6 +14,7 @@
 
 .axis text {
   font: sans-serif;
+  user-select: none;
 }
 
 .axis-label {
@@ -26,9 +27,14 @@
   font-size: 0.7em;
 }
 
-.selected {
+.node.selected {
   stroke: black;
   stroke-width: 2;
+}
+
+.worldline.selected {
+  stroke: red;
+  stroke-dasharray: 10,2;
 }
 
 .tooltip {

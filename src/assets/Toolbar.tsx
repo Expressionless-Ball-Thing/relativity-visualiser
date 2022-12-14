@@ -3,7 +3,7 @@ export const ToolBar = ({ clickedEvent, deleteEvent, updateEvent }) => {
   return (
     <div className="ToolBar">
       <div className="Typebar">
-        <text className="control_label type">Type:</text>
+        <span className="control_label type">Type:</span>
         <label className="label_type">N/A</label>
       </div>
       <div className="Namebar">
