@@ -32,6 +32,15 @@
   stroke-width: 2;
 }
 
+.worldline {
+  stroke: black;
+  stroke-width: 2;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
 .worldline.selected {
   stroke: red;
   stroke-dasharray: 10,2;

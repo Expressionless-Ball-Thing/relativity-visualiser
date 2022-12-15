@@ -1,6 +1,7 @@
 import { scaleLinear } from "d3";
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren, useEffect, useRef } from "react";
 import { EventNode, WorldLine } from "./App";
+import DragLine from "./assets/DragLine";
 import Events_WorldLines from "./assets/Events_WorldLines";
 import { SpaceAxis } from "./assets/SpaceAxis";
 import { TimeAxis } from "./assets/TimeAxis";
@@ -17,7 +18,9 @@ export const Grid = ({
   setWorldlines,
   worldlines,
   clickedWorldLine,
-  setClickedWorldLine
+  setClickedWorldLine,
+  mode,
+  setMode
 }) => {
 
   const width: number = 1000;
@@ -83,8 +86,11 @@ export const Grid = ({
     }
   };
 
+  const GridRef = useRef(null)
+
   return (
     <svg
+      ref={GridRef}
       width={width}
       height={height}
       id="visualiser"
@@ -104,6 +110,7 @@ export const Grid = ({
         width={width}
         margin={margin}
       />
+      <DragLine mode={mode} clickedEvent={clickedEvent} SpaceScale={SpaceScale} TimeScale={TimeScale}/>
       <Events_WorldLines
         events={events}
         worldlines={worldlines}
@@ -113,6 +120,8 @@ export const Grid = ({
         setClickedEvent={setClickedEvent}
         clickedWorldLine={clickedWorldLine}
         setClickedWorldLine={setClickedWorldLine}
+        mode={mode}
+        setMode={setMode}
       />
     </svg>
   );

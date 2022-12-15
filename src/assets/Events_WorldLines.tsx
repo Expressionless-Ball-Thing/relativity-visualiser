@@ -12,7 +12,9 @@ const Events_WorldLines = ({
   clickedEvent,
   setClickedEvent,
   clickedWorldLine,
-  setClickedWorldLine
+  setClickedWorldLine,
+  mode,
+  setMode
 }) => {
   const [tooltip, setTooltip] = useState<WorldLine| EventNode | boolean>(false);
 
@@ -58,21 +60,36 @@ const Events_WorldLines = ({
   };
 
   const mouseoverWorldLine = (event: Event, component) => {
-    event.stopPropagation()
-    setTooltip(component);
-    event.target.style.stroke = "red";
-    event.target.style.strokeWidth = 2;
-    document.body.style.cursor = "pointer";
+    if (mode === "idle") {
+      event.stopPropagation()
+      setTooltip(component);
+      event.target.style.stroke = "red";
+      event.target.style.strokeWidth = 5;
+      document.body.style.cursor = "pointer";      
+    }
+
   };
 
   const mouseleaveWorldLine = (event: Event) => {
-    event.stopPropagation()
-    setTooltip(false);
-    event.target.style = "";
-    document.body.style.cursor = "";
+    if (mode === "idle") {
+      event.stopPropagation()
+      setTooltip(false);
+      event.target.style = "";
+      document.body.style.cursor = "";
+    }
+
   };
 
-  useEffect(() => {
+  const mousedownEvent = (component) => {
+    setClickedWorldLine(false); 
+    setClickedEvent(component);
+    if (mode === 'idle') {
+      setMode('dragLine')
+    }
+  }
+
+
+  useEffect(() => {    
     const svg = d3.select(EventRef.current);
     svg.selectAll(".worldline")
       .data(worldlines)
@@ -87,7 +104,7 @@ const Events_WorldLines = ({
       .classed("selected", (d) => (d === clickedWorldLine ? true : false))
       .on("mouseover", (event, component) => mouseoverWorldLine(event, component))
       .on("mouseleave", (event) => mouseleaveWorldLine(event))
-      .on("click", (_, component) => {setClickedEvent(false);setClickedWorldLine(component)});
+      .on("mousedown", (_, component) => {setClickedEvent(false);setClickedWorldLine(component)});
 
     svg
       .selectAll(".node")
@@ -102,7 +119,8 @@ const Events_WorldLines = ({
       .classed("selected", (d) => (d.id === clickedEvent.id ? true : false))
       .on("mouseover", (event, component) => mouseoverEvent(event, component))
       .on("mouseleave", (event) => mouseleaveEvent(event))
-      .on("click", (_, component) => {setClickedWorldLine(false); setClickedEvent(component)});
+      .on("mouseup", () => console.log("cum"))
+      .on("mousedown", (_, component) => {mousedownEvent(component)});
   });
 
   return (

@@ -58,7 +58,10 @@ const App = () => {
         setClickedEvent={setClickedEvent}
         setClickedWorldLine={setClickedWorldLine}
         setEvents={setEvents} 
-        setWorldlines={setWorldlines}/>
+        setWorldlines={setWorldlines}
+        mode={mode}
+        setMode={setMode}
+        />
     </div>
   );
 };
