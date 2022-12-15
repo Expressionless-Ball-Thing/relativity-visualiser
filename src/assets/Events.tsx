@@ -4,22 +4,19 @@ import { EventNode, WorldLine } from "../App";
 
 const colorScale = d3.schemePaired;
 
-const Events_WorldLines = ({
+const Events = ({
   events,
   worldlines,
   SpaceScale,
   TimeScale,
   clickedEvent,
   setClickedEvent,
-  clickedWorldLine,
   setClickedWorldLine,
   mode,
   setMode,
   setWorldlines,
 }) => {
   //const [tooltip, setTooltip] = useState<WorldLine| EventNode | boolean>(false);
-
-  const EventRef = useRef(null);
   const mouseoverEvent = (event) => {
     event.stopPropagation();
     event.target.style.stroke = "black";
@@ -33,23 +30,6 @@ const Events_WorldLines = ({
     document.body.style.cursor = "";
   };
 
-  const mouseoverWorldLine = (event) => {
-    if (mode === "idle") {
-      event.stopPropagation();
-      event.target.style.stroke = "red";
-      event.target.style.strokeWidth = 5;
-      document.body.style.cursor = "pointer";
-    }
-  };
-
-  const mouseleaveWorldLine = (event) => {
-    if (mode === "idle") {
-      event.stopPropagation();
-      event.target.style = "";
-      document.body.style.cursor = "";
-    }
-  };
-
   const mousedownEvent = (event) => {
     setClickedWorldLine(false);
     setClickedEvent(event);
@@ -58,12 +38,7 @@ const Events_WorldLines = ({
     }
   };
 
-  const mousedownWorldLine = (worldline) => {
-    setClickedEvent(false);
-    setClickedWorldLine(worldline);
-  };
-
-  const mosueupEvent = (event: EventNode) => {
+  const mouseupEvent = (event: EventNode) => {
     const tempWorldlines = [...worldlines];
     const newline: object = {
       source: clickedEvent,
@@ -81,24 +56,6 @@ const Events_WorldLines = ({
 
   return (
     <g>
-      {worldlines.map((worldline: WorldLine) => {
-        return (
-          <path
-            className={`worldline ${
-              worldline === clickedWorldLine ? "selected" : ""
-            }`}
-            d={`M${SpaceScale(worldline.source.x)},${TimeScale(
-              worldline.source.t
-            )} L${SpaceScale(worldline.target.x)},${TimeScale(
-              worldline.target.t
-            )}`}
-            onMouseOver={(domEvent) => mouseoverWorldLine(domEvent)}
-            onMouseLeave={(domEvent) => mouseleaveWorldLine(domEvent)}
-            onMouseDown={() => mousedownWorldLine(worldline)}
-          ></path>
-        );
-      })}
-
       {events.map((event: EventNode) => {
         return (
           <circle
@@ -110,7 +67,7 @@ const Events_WorldLines = ({
             className={`node ${event.id === clickedEvent.id ? "selected" : ""}`}
             onMouseOver={(domEvent) => mouseoverEvent(domEvent)}
             onMouseLeave={(domEvent) => mouseleaveEvent(domEvent)}
-            onMouseUp={() => mosueupEvent(event)}
+            onMouseUp={() => mouseupEvent(event)}
             onMouseDown={() => mousedownEvent(event)}
           ></circle>
         );
@@ -120,4 +77,4 @@ const Events_WorldLines = ({
 };
 
 //{tooltip && <Tooltip eventdata={tooltip} />}
-export default Events_WorldLines;
+export default Events;

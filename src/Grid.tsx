@@ -1,10 +1,11 @@
 import { scaleLinear } from "d3";
-import { PropsWithChildren, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { EventNode, WorldLine } from "./App";
 import DragLine from "./assets/DragLine";
-import Events_WorldLines from "./assets/Events_WorldLines";
+import Events from "./assets/Events";
 import { SpaceAxis } from "./assets/SpaceAxis";
 import { TimeAxis } from "./assets/TimeAxis";
+import WorldLines from "./assets/WorldLines";
 
 export interface Margin {
   top: number, right: number, bottom: number, left: number
@@ -40,7 +41,7 @@ export const Grid = ({
       document.removeEventListener("keydown", handleKeyDown);
       document.addEventListener("mouseup", () => setMode("idle"));
     };
-  }, [clickedEvent]);
+  }, [clickedEvent, clickedWorldLine]);
 
 
   const addEvent = (event) => {
@@ -80,9 +81,10 @@ export const Grid = ({
       setEvents(events.filter((event: EventNode) => event.id !== clickedEvent.id));
       setWorldlines(worldlines.filter((event: WorldLine) => event.source !== clickedEvent && event.target !== clickedEvent))  
     } else {
-      setWorldlines(worldlines.filter((worldline: WorldLine) => {
+      const tempWorldlines = worldlines.filter((worldline: WorldLine) => {
         return !((worldline.source === clickedWorldLine.source && worldline.target === clickedWorldLine.target) || (worldline.source === clickedWorldLine.target && worldline.target === clickedWorldLine.source))  
-      }));
+      })
+      setWorldlines(tempWorldlines);
     }
     setClickedEvent(false)
     setClickedWorldLine(false)
@@ -121,14 +123,22 @@ export const Grid = ({
         margin={margin}
       />
       <DragLine mode={mode} clickedEvent={clickedEvent} SpaceScale={SpaceScale} TimeScale={TimeScale}/>
-      <Events_WorldLines
+      <WorldLines 
+        worldlines={worldlines}
+        SpaceScale={SpaceScale}
+        TimeScale={TimeScale}
+        setClickedWorldLine={setClickedWorldLine}
+        setClickedEvent={setClickedEvent}
+        mode={mode}
+        setMode={setMode} 
+        clickedWorldLine={clickedWorldLine}      />
+      <Events
         events={events}
         worldlines={worldlines}
         SpaceScale={SpaceScale}
         TimeScale={TimeScale}
         clickedEvent={clickedEvent}
         setClickedEvent={setClickedEvent}
-        clickedWorldLine={clickedWorldLine}
         setClickedWorldLine={setClickedWorldLine}
         mode={mode}
         setMode={setMode}
