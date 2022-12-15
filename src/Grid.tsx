@@ -35,10 +35,13 @@ export const Grid = ({
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mouseup", () => setMode("idle"));
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
+      document.addEventListener("mouseup", () => setMode("idle"));
     };
   }, [clickedEvent]);
+
 
   const addEvent = (event) => {
     let currentTargetRect = event.currentTarget.getBoundingClientRect();
@@ -122,6 +125,7 @@ export const Grid = ({
         setClickedWorldLine={setClickedWorldLine}
         mode={mode}
         setMode={setMode}
+        setWorldlines={setWorldlines}
       />
     </svg>
   );

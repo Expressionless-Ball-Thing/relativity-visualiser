@@ -14,47 +14,22 @@ const Events_WorldLines = ({
   clickedWorldLine,
   setClickedWorldLine,
   mode,
-  setMode
+  setMode,
+  setWorldlines
 }) => {
-  const [tooltip, setTooltip] = useState<WorldLine| EventNode | boolean>(false);
+  //const [tooltip, setTooltip] = useState<WorldLine| EventNode | boolean>(false);
 
   const EventRef = useRef(null);
-
-  /*
-  const Tooltip = (eventdata : WorldLine| EventNode) => {
-
-    console.log(eventdata)
-
-    return (
-      <foreignObject
-        x={SpaceScale(eventdata.x) + 10}
-        y={TimeScale(eventdata.t) + 10}
-        width={100}
-        height={100}
-      >
-        <div className="tooltip">
-          <strong>{eventdata.name}</strong>
-          <br />
-          x: {eventdata.x}
-          <br />
-          t: {eventdata.t}
-        </div>
-      </foreignObject>
-    );
-  };
-  */
-
-  const mouseoverEvent = (event: object, component) => {
+  const mouseoverEvent = (event: Event, component) => {
     event.stopPropagation()
-    setTooltip(component);
     event.target.style.stroke = "black";
     event.target.style.strokeWidth = 2;
     document.body.style.cursor = "pointer";
+
   };
 
   const mouseleaveEvent = (event: Event) => {
     event.stopPropagation()
-    setTooltip(false);
     event.target.style = "";
     document.body.style.cursor = "";
   };
@@ -62,7 +37,6 @@ const Events_WorldLines = ({
   const mouseoverWorldLine = (event: Event, component) => {
     if (mode === "idle") {
       event.stopPropagation()
-      setTooltip(component);
       event.target.style.stroke = "red";
       event.target.style.strokeWidth = 5;
       document.body.style.cursor = "pointer";      
@@ -73,7 +47,6 @@ const Events_WorldLines = ({
   const mouseleaveWorldLine = (event: Event) => {
     if (mode === "idle") {
       event.stopPropagation()
-      setTooltip(false);
       event.target.style = "";
       document.body.style.cursor = "";
     }
@@ -119,7 +92,15 @@ const Events_WorldLines = ({
       .classed("selected", (d) => (d.id === clickedEvent.id ? true : false))
       .on("mouseover", (event, component) => mouseoverEvent(event, component))
       .on("mouseleave", (event) => mouseleaveEvent(event))
-      .on("mouseup", () => console.log("cum"))
+      .on("mouseup", (_, component) => {
+        const tempWorldlines = [...worldlines]
+        const newline: object = {source: {...clickedEvent}, target: component}
+        if (tempWorldlines.includes(newline) || clickedEvent === component) {return};
+        tempWorldlines.push(newline)
+        setClickedEvent(component)
+        setMode('idle')
+        setWorldlines(tempWorldlines)
+      })
       .on("mousedown", (_, component) => {mousedownEvent(component)});
   });
 
