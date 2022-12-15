@@ -50,9 +50,9 @@ const Events_WorldLines = ({
     }
   };
 
-  const mousedownEvent = (component) => {
+  const mousedownEvent = (event) => {
     setClickedWorldLine(false);
-    setClickedEvent(component);
+    setClickedEvent(event);
     if (mode === "idle") {
       setMode("dragLine");
     }

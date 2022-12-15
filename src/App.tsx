@@ -21,15 +21,8 @@ const App = () => {
   const [clickedEvent, setClickedEvent] = useState<EventNode | boolean>(false);
   const [clickedWorldLine, setClickedWorldLine] = useState<WorldLine | boolean>(false);
   const [mode, setMode] = useState<Mode>("idle");
-  const [events, setEvents] = useState<EventNode[]>([
-    {id: 0, name: "You", x: 0, t: 0},
-    {id: 1, name: "event", x: 4, t: 4},
-    {id: 2, name: "another event", x: 0, t: 8}
-  ]);
-  const [worldlines, setWorldlines] = useState<WorldLine[]>([
-    {source: events[0], target: events[1]},
-    {source: events[1], target: events[2]}
-  ])
+  const [events, setEvents] = useState<EventNode[]>([]);
+  const [worldlines, setWorldlines] = useState<WorldLine[]>([])
 
   const deleteEvent = () => {
     console.log("hey")

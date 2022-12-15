@@ -75,17 +75,24 @@ export const Grid = ({
     }
   };
 
-  const deleteEvent = () => {
-    setEvents(events.filter((event: EventNode) => event.id !== clickedEvent.id));
-    setWorldlines(worldlines.filter((event: WorldLine) => event.source !== clickedEvent && event.target !== clickedEvent))
+  const deleteStuff = () => {
+    if (clickedEvent !== false) {
+      setEvents(events.filter((event: EventNode) => event.id !== clickedEvent.id));
+      setWorldlines(worldlines.filter((event: WorldLine) => event.source !== clickedEvent && event.target !== clickedEvent))  
+    } else {
+      setWorldlines(worldlines.filter((worldline: WorldLine) => {
+        return !((worldline.source === clickedWorldLine.source && worldline.target === clickedWorldLine.target) || (worldline.source === clickedWorldLine.target && worldline.target === clickedWorldLine.source))  
+      }));
+    }
     setClickedEvent(false)
+    setClickedWorldLine(false)
   };
 
   const handleKeyDown = (event) => {
     //Temp hack solution so that the keydown won't trigger in the input box.
     if (event.target.id === "Eventname") return;
     if (["Backspace", "Delete"].includes(event.key)) {
-      deleteEvent();
+      deleteStuff();
     }
   };
 
