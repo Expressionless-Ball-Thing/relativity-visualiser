@@ -63,8 +63,24 @@ const Events_WorldLines = ({
     setClickedWorldLine(worldline);
   };
 
+  const mosueupEvent = (event: EventNode) => {
+    const tempWorldlines = [...worldlines];
+    const newline: object = {
+      source: clickedEvent,
+      target: event,
+    };
+    const inplaceWorldLine = tempWorldlines.filter((l) => ((l.source === clickedEvent && l.target === event) || (l.target === clickedEvent && l.source === event)))
+    if (inplaceWorldLine.length > 0 || clickedEvent === event) {
+      return;
+    }
+    tempWorldlines.push(newline);
+    setClickedEvent(event);
+    setMode("idle");
+    setWorldlines(tempWorldlines);
+  }
+
   return (
-    <>
+    <g>
       {worldlines.map((worldline: WorldLine) => {
         return (
           <path
@@ -94,25 +110,12 @@ const Events_WorldLines = ({
             className={`node ${event.id === clickedEvent.id ? "selected" : ""}`}
             onMouseOver={(domEvent) => mouseoverEvent(domEvent)}
             onMouseLeave={(domEvent) => mouseleaveEvent(domEvent)}
-            onMouseUp={() => {
-              const tempWorldlines = [...worldlines];
-              const newline: object = {
-                source: { ...clickedEvent },
-                target: event,
-              };
-              if (tempWorldlines.includes(newline) || clickedEvent === event) {
-                return;
-              }
-              tempWorldlines.push(newline);
-              setClickedEvent(event);
-              setMode("idle");
-              setWorldlines(tempWorldlines);
-            }}
+            onMouseUp={() => mosueupEvent(event)}
             onMouseDown={() => mousedownEvent(event)}
           ></circle>
         );
       })}
-    </>
+    </g>
   );
 };
 
