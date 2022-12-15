@@ -15,102 +15,106 @@ const Events_WorldLines = ({
   setClickedWorldLine,
   mode,
   setMode,
-  setWorldlines
+  setWorldlines,
 }) => {
   //const [tooltip, setTooltip] = useState<WorldLine| EventNode | boolean>(false);
 
   const EventRef = useRef(null);
-  const mouseoverEvent = (event: Event, component) => {
-    event.stopPropagation()
+  const mouseoverEvent = (event) => {
+    event.stopPropagation();
     event.target.style.stroke = "black";
     event.target.style.strokeWidth = 2;
     document.body.style.cursor = "pointer";
-
   };
 
-  const mouseleaveEvent = (event: Event) => {
-    event.stopPropagation()
+  const mouseleaveEvent = (event) => {
+    event.stopPropagation();
     event.target.style = "";
     document.body.style.cursor = "";
   };
 
-  const mouseoverWorldLine = (event: Event, component) => {
+  const mouseoverWorldLine = (event) => {
     if (mode === "idle") {
-      event.stopPropagation()
+      event.stopPropagation();
       event.target.style.stroke = "red";
       event.target.style.strokeWidth = 5;
-      document.body.style.cursor = "pointer";      
+      document.body.style.cursor = "pointer";
     }
-
   };
 
-  const mouseleaveWorldLine = (event: Event) => {
+  const mouseleaveWorldLine = (event) => {
     if (mode === "idle") {
-      event.stopPropagation()
+      event.stopPropagation();
       event.target.style = "";
       document.body.style.cursor = "";
     }
-
   };
 
   const mousedownEvent = (component) => {
-    setClickedWorldLine(false); 
+    setClickedWorldLine(false);
     setClickedEvent(component);
-    if (mode === 'idle') {
-      setMode('dragLine')
+    if (mode === "idle") {
+      setMode("dragLine");
     }
-  }
+  };
 
-
-  useEffect(() => {    
-    const svg = d3.select(EventRef.current);
-    svg.selectAll(".worldline")
-      .data(worldlines)
-      .join("line")
-      .attr("x1", d => SpaceScale(d.source.x))
-      .attr("y1", d => TimeScale(d.source.t))
-      .attr("x2", d => SpaceScale(d.target.x))
-      .attr("y2", d => TimeScale(d.target.t))
-      .style("stroke-width", `2px`)
-      .style("stroke", "#000000")
-      .classed("worldline", true)
-      .classed("selected", (d) => (d === clickedWorldLine ? true : false))
-      .on("mouseover", (event, component) => mouseoverWorldLine(event, component))
-      .on("mouseleave", (event) => mouseleaveWorldLine(event))
-      .on("mousedown", (_, component) => {setClickedEvent(false);setClickedWorldLine(component)});
-
-    svg
-      .selectAll(".node")
-      .data(events)
-      .join("circle")
-      .attr("id", (d) => d.id.toString())
-      .attr("r", 5)
-      .attr("cx", (d) => SpaceScale(d.x))
-      .attr("cy", (d) => TimeScale(d.t))
-      .attr("fill", (d) => colorScale[d.id % colorScale.length])
-      .classed("node", true)
-      .classed("selected", (d) => (d.id === clickedEvent.id ? true : false))
-      .on("mouseover", (event, component) => mouseoverEvent(event, component))
-      .on("mouseleave", (event) => mouseleaveEvent(event))
-      .on("mouseup", (_, component) => {
-        const tempWorldlines = [...worldlines]
-        const newline: object = {source: {...clickedEvent}, target: component}
-        if (tempWorldlines.includes(newline) || clickedEvent === component) {return};
-        tempWorldlines.push(newline)
-        setClickedEvent(component)
-        setMode('idle')
-        setWorldlines(tempWorldlines)
-      })
-      .on("mousedown", (_, component) => {mousedownEvent(component)});
-  });
+  const mousedownWorldLine = (worldline) => {
+    setClickedEvent(false);
+    setClickedWorldLine(worldline);
+  };
 
   return (
     <>
-      <g ref={EventRef}></g>
+      {worldlines.map((worldline: WorldLine) => {
+        return (
+          <path
+            className={`worldline ${
+              worldline === clickedWorldLine ? "selected" : ""
+            }`}
+            d={`M${SpaceScale(worldline.source.x)},${TimeScale(
+              worldline.source.t
+            )} L${SpaceScale(worldline.target.x)},${TimeScale(
+              worldline.target.t
+            )}`}
+            onMouseOver={(domEvent) => mouseoverWorldLine(domEvent)}
+            onMouseLeave={(domEvent) => mouseleaveWorldLine(domEvent)}
+            onMouseDown={() => mousedownWorldLine(worldline)}
+          ></path>
+        );
+      })}
+
+      {events.map((event: EventNode) => {
+        return (
+          <circle
+            id={event.id.toString()}
+            r={5}
+            cx={SpaceScale(event.x)}
+            cy={TimeScale(event.t)}
+            fill={colorScale[event.id % colorScale.length]}
+            className={`node ${event.id === clickedEvent.id ? "selected" : ""}`}
+            onMouseOver={(domEvent) => mouseoverEvent(domEvent)}
+            onMouseLeave={(domEvent) => mouseleaveEvent(domEvent)}
+            onMouseUp={() => {
+              const tempWorldlines = [...worldlines];
+              const newline: object = {
+                source: { ...clickedEvent },
+                target: event,
+              };
+              if (tempWorldlines.includes(newline) || clickedEvent === event) {
+                return;
+              }
+              tempWorldlines.push(newline);
+              setClickedEvent(event);
+              setMode("idle");
+              setWorldlines(tempWorldlines);
+            }}
+            onMouseDown={() => mousedownEvent(event)}
+          ></circle>
+        );
+      })}
     </>
   );
 };
 
-
- //{tooltip && <Tooltip eventdata={tooltip} />}
+//{tooltip && <Tooltip eventdata={tooltip} />}
 export default Events_WorldLines;
