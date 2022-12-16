@@ -1,70 +1,80 @@
-import { schemePaired } from "d3";
-import React, { useState } from "react";
-import { EventNode } from "../App";
+import * as d3 from "d3";
+import { useEffect, useRef, useState } from "react";
+import { EventNode, WorldLine } from "../App";
 
-const colorScale = schemePaired;
+const colorScale = d3.schemePaired;
 
 const Events = ({
   events,
+  worldlines,
   SpaceScale,
   TimeScale,
   clickedEvent,
-  setClickedEvent
+  setClickedEvent,
+  setClickedWorldLine,
+  mode,
+  setMode,
+  setWorldlines,
 }) => {
-  const [tooltip, setTooltip] = useState<object | boolean>(false);
-
-  const Tooltip = ({eventdata}) => {
-    return (
-    <foreignObject x={SpaceScale(eventdata.x) + 10} y={TimeScale(eventdata.t) + 10} width={100} height={100}>
-      <div className="tooltip">
-        <strong>{eventdata.name}</strong>
-        <br/>
-        x: {eventdata.x}
-        <br/>
-        t: {eventdata.t}
-      </div>
-    </foreignObject>
-  )}
-
-
-  const mouseover = (event: object) => {
+  //const [tooltip, setTooltip] = useState<WorldLine| EventNode | boolean>(false);
+  const mouseoverEvent = (event) => {
+    event.stopPropagation();
     event.target.style.stroke = "black";
     event.target.style.strokeWidth = 2;
+    document.body.style.cursor = "pointer";
   };
 
-  const mouseleave = (event: object) => {
+  const mouseleaveEvent = (event) => {
+    event.stopPropagation();
     event.target.style = "";
+    document.body.style.cursor = "";
   };
+
+  const mousedownEvent = (event) => {
+    setClickedWorldLine(false);
+    setClickedEvent(event);
+    if (mode === "idle") {
+      setMode("dragLine");
+    }
+  };
+
+  const mouseupEvent = (event: EventNode) => {
+    const tempWorldlines = [...worldlines];
+    const newline: object = {
+      source: clickedEvent,
+      target: event,
+    };
+    const inplaceWorldLine = tempWorldlines.filter((l) => ((l.source === clickedEvent && l.target === event) || (l.target === clickedEvent && l.source === event)))
+    if (inplaceWorldLine.length > 0 || clickedEvent === event) {
+      return;
+    }
+    tempWorldlines.push(newline);
+    setClickedEvent(event);
+    setMode("idle");
+    setWorldlines(tempWorldlines);
+  }
 
   return (
-    <>
-      {events.map((event: EventNode) => (
-        <circle
-          id={event.id}
-          key={event.id}
-          className={`node ${event.id === clickedEvent.id ? "selected" : ""}`}
-          fill={`${colorScale[event.id % colorScale.length]}`}
-          cx={SpaceScale(event.x)}
-          cy={TimeScale(event.t)}
-          r={5}
-          onMouseOver={(component: object) => {
-            setTooltip(event);
-            mouseover(component);
-          }}
-          onMouseLeave={(component: object) => {
-            setTooltip(false);
-            mouseleave(component);
-          }}
-          onClick={() => {setClickedEvent(event)}}
-        />
-      ))}
-      {tooltip && (
-        <Tooltip
-          eventdata={tooltip}
-        />
-      )}
-    </>
+    <g>
+      {events.map((event: EventNode) => {
+        return (
+          <circle
+            id={event.id.toString()}
+            r={5}
+            cx={SpaceScale(event.x)}
+            cy={TimeScale(event.t)}
+            fill={colorScale[event.id % colorScale.length]}
+            className={`node ${event.id === clickedEvent.id ? "selected" : ""}`}
+            onMouseOver={(domEvent) => mouseoverEvent(domEvent)}
+            onMouseLeave={(domEvent) => mouseleaveEvent(domEvent)}
+            onMouseUp={() => mouseupEvent(event)}
+            onMouseDown={() => mousedownEvent(event)}
+          ></circle>
+        );
+      })}
+    </g>
   );
 };
 
+//{tooltip && <Tooltip eventdata={tooltip} />}
 export default Events;

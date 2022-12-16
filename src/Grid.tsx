@@ -1,9 +1,11 @@
 import { scaleLinear } from "d3";
-import { PropsWithChildren, useEffect } from "react";
-import { EventNode } from "./App";
+import { useEffect, useRef } from "react";
+import { EventNode, WorldLine } from "./App";
+import DragLine from "./assets/DragLine";
 import Events from "./assets/Events";
 import { SpaceAxis } from "./assets/SpaceAxis";
 import { TimeAxis } from "./assets/TimeAxis";
+import WorldLines from "./assets/WorldLines";
 
 export interface Margin {
   top: number, right: number, bottom: number, left: number
@@ -14,13 +16,17 @@ export const Grid = ({
   clickedEvent,
   setClickedEvent,
   setEvents,
+  setWorldlines,
+  worldlines,
+  clickedWorldLine,
+  setClickedWorldLine,
+  mode,
+  setMode
 }) => {
 
-  const width: number = 650;
-  const height: number = 650;
+  const width: number = 1000;
+  const height: number = 1000;
   const margin = { top: 20, right: 20, bottom: 20, left: 20 };
-  const innerHeight = height - margin.top - margin.bottom;
-  const innerWidth = width - margin.left - margin.right;
   const SpaceScale = scaleLinear()
     .domain([10, -10])
     .range([width - margin.right, margin.left]);
@@ -30,10 +36,13 @@ export const Grid = ({
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mouseup", () => setMode("idle"));
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
+      document.addEventListener("mouseup", () => setMode("idle"));
     };
-  }, [clickedEvent]);
+  }, [clickedEvent, clickedWorldLine]);
+
 
   const addEvent = (event) => {
     let currentTargetRect = event.currentTarget.getBoundingClientRect();
@@ -41,15 +50,15 @@ export const Grid = ({
     let top = event.clientY - currentTargetRect.top
     if (left < margin.left || left > width - margin.right || top < margin.top || top > height - margin.bottom) return;
 
-    let lastnodeId = events.reduce(function(acc, currevent){
+    let lastnodeId = events.reduce(function(acc: number, currevent : EventNode){
       return currevent.id > acc ? currevent.id : acc;
     }, 0);
 
     const newEvent = {
       id: lastnodeId + 1,
       name: "",
-      x: SpaceScale.invert(left),
-      t: TimeScale.invert(top),
+      x: Math.round(SpaceScale.invert(left) * 10) / 10,
+      t: Math.round(TimeScale.invert(top) * 10) / 10,
     };
     const tempEvent = [...events];
     tempEvent.push(newEvent);
@@ -57,17 +66,8 @@ export const Grid = ({
     setEvents(tempEvent);
   }
 
-  const clickedSomething = (event:Event) => {
-    if (event.target.className !== "node") {
-      setClickedEvent(null);
-    }
-  }
-
-  const handleClick = (event:Event) => {
+  const handleClick = (event) => {
     switch (event.detail) {
-      case 1:
-        /* TODO: check if the user clicked on an event, line or nothing.*/
-        break;
       case 2:
         addEvent(event);
         break;
@@ -76,44 +76,73 @@ export const Grid = ({
     }
   };
 
-  const deleteEvent = () => {
-    setEvents(events.filter((event: EventNode) => event.id !== clickedEvent.id));
+  const deleteStuff = () => {
+    if (clickedEvent !== false) {
+      setEvents(events.filter((event: EventNode) => event.id !== clickedEvent.id));
+      setWorldlines(worldlines.filter((event: WorldLine) => event.source !== clickedEvent && event.target !== clickedEvent))  
+    } else {
+      const tempWorldlines = worldlines.filter((worldline: WorldLine) => {
+        return !((worldline.source === clickedWorldLine.source && worldline.target === clickedWorldLine.target) || (worldline.source === clickedWorldLine.target && worldline.target === clickedWorldLine.source))  
+      })
+      setWorldlines(tempWorldlines);
+    }
+    setClickedEvent(false)
+    setClickedWorldLine(false)
   };
 
   const handleKeyDown = (event) => {
+    //Temp hack solution so that the keydown won't trigger in the input box.
     if (event.target.id === "Eventname") return;
     if (["Backspace", "Delete"].includes(event.key)) {
-      deleteEvent();
+      deleteStuff();
     }
   };
 
+  const GridRef = useRef(null)
+
   return (
     <svg
+      ref={GridRef}
       width={width}
       height={height}
-      className="visualiser"
+      id="visualiser"
       onClick={handleClick}
+      onMouseOver={() => document.body.style.cursor = "crosshair"}
+      onMouseLeave={() => document.body.style.cursor = ""}
     >
       <SpaceAxis
         SpaceScale={SpaceScale}
         height={height}
         width={width}
         margin={margin}
-        innerWidth={innerWidth}
       />
       <TimeAxis
         TimeScale={TimeScale}
         height={height}
         width={width}
         margin={margin}
-        innerHeight={innerHeight}
       />
+      <DragLine mode={mode} clickedEvent={clickedEvent} SpaceScale={SpaceScale} TimeScale={TimeScale}/>
+      <WorldLines 
+        worldlines={worldlines}
+        SpaceScale={SpaceScale}
+        TimeScale={TimeScale}
+        setClickedWorldLine={setClickedWorldLine}
+        setClickedEvent={setClickedEvent}
+        mode={mode}
+        setMode={setMode} 
+        clickedWorldLine={clickedWorldLine}      />
       <Events
         events={events}
+        worldlines={worldlines}
         SpaceScale={SpaceScale}
         TimeScale={TimeScale}
         clickedEvent={clickedEvent}
         setClickedEvent={setClickedEvent}
+        setClickedWorldLine={setClickedWorldLine}
+        mode={mode}
+        setMode={setMode}
+        setWorldlines={setWorldlines}
       />
     </svg>
   );

@@ -1,28 +1,51 @@
+import { WorldLine } from "../App";
 
-export const ToolBar = ({ clickedEvent, deleteEvent, updateEvent }) => {
+type interval = "Timelike" | "Spacelike" | "Lightlike"
+
+const determineIntervalType = (worldLine: WorldLine): interval => {
+  let interval_time = worldLine.target.t - worldLine.source.t 
+  let interval_space = worldLine.target.x - worldLine.source.x
+
+  let spacetime_interval = Math.pow(interval_time, 2) - Math.pow(interval_space, 2)
+
+  if (spacetime_interval > 0) {
+    return "Timelike"
+  } else if (spacetime_interval < 0) {
+    return "Spacelike"
+  } else {
+    return "Lightlike"
+  }
+
+}
+
+export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEvent, deleteWorldLine }) => {
   return (
     <div className="ToolBar">
       <div className="Typebar">
-        <text className="control_label type">Type:</text>
-        <label className="label_type">N/A</label>
+        <span className="control_label type">Type:</span>
+        <span className="label_type">{clickedEvent !== false ? "Event" : clickedWorldline !== false ? `${determineIntervalType(clickedWorldline)} interval`: "N/A"}</span>
       </div>
       <div className="Namebar">
-        <text className="control_label input_label">Event Name:</text>
+        <div className="control_label input_label">Event Name:</div>
 
+        {clickedWorldline !== false ? 
+        <button className="transform" name="transform">Transform</button>
+        :
         <input
           type="text"
           id="Eventname"
           placeholder={clickedEvent.name}
           onChange={updateEvent}
-          disabled={clickedEvent === null ? true : false}
+          disabled={clickedEvent === false ? true : false}
         />
+        }
 
         <button className="delete" name="delete" onClick={deleteEvent}>
           delete
         </button>
       </div>
       <div className="Addbar">
-        <span className="control_label move_event">Move_Event:</span>
+        <span className="control_label move_event">Move Event:</span>
         <input type="checkbox" name="add" />
       </div>
     </div>
