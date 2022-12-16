@@ -19,11 +19,14 @@ const determineIntervalType = (worldLine: WorldLine): interval => {
 }
 
 export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEvent, deleteWorldLine }) => {
+
+  const intervalType = clickedWorldline === false ? null : determineIntervalType(clickedWorldline);
+
   return (
     <div className="ToolBar">
       <div className="Typebar">
         <span className="control_label type">Type:</span>
-        <span className="label_type">{clickedEvent !== false ? "Event" : clickedWorldline !== false ? `${determineIntervalType(clickedWorldline)} interval`: "N/A"}</span>
+        <span className="label_type">{clickedEvent !== false ? "Event" : clickedWorldline !== false ? `${intervalType} interval`: "N/A"}</span>
       </div>
       <div className="Namebar">
         <div className="control_label input_label">Event Name:</div>
@@ -40,7 +43,7 @@ export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEve
         />
         }
 
-        <button className="delete" name="delete" onClick={deleteEvent}>
+        <button className="delete" name="delete" onClick={clickedEvent !== false ? deleteEvent : deleteWorldLine}>
           delete
         </button>
       </div>
