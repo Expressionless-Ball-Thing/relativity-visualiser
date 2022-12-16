@@ -5,11 +5,17 @@ import DragLine from "./assets/DragLine";
 import Events from "./assets/Events";
 import { SpaceAxis } from "./assets/SpaceAxis";
 import { TimeAxis } from "./assets/TimeAxis";
+import Transformed from "./assets/Transformed";
 import WorldLines from "./assets/WorldLines";
 
 export interface Margin {
   top: number, right: number, bottom: number, left: number
 }
+
+const width: number = 1000;
+const height: number = 1000;
+const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+
 
 export const Grid = ({
   events,
@@ -21,19 +27,16 @@ export const Grid = ({
   clickedWorldLine,
   setClickedWorldLine,
   mode,
-  setMode
+  setMode,
+  velocity
 }) => {
-
-  const width: number = 1000;
-  const height: number = 1000;
-  const margin = { top: 20, right: 20, bottom: 20, left: 20 };
   const SpaceScale = scaleLinear()
     .domain([10, -10])
     .range([width - margin.right, margin.left]);
   const TimeScale = scaleLinear()
     .domain([-10, 10])
     .range([height - margin.bottom, margin.top]);
-
+    
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("mouseup", () => setMode("idle"));
@@ -123,6 +126,13 @@ export const Grid = ({
         margin={margin}
       />
       <DragLine mode={mode} clickedEvent={clickedEvent} SpaceScale={SpaceScale} TimeScale={TimeScale}/>
+      <Transformed 
+        events={events}
+        worldlines={worldlines}
+        velocity={velocity}
+        SpaceScale={SpaceScale}
+        TimeScale={TimeScale}
+      />
       <WorldLines 
         worldlines={worldlines}
         SpaceScale={SpaceScale}
@@ -131,7 +141,7 @@ export const Grid = ({
         setClickedEvent={setClickedEvent}
         mode={mode}
         setMode={setMode} 
-        clickedWorldLine={clickedWorldLine}      />
+        clickedWorldLine={clickedWorldLine}/>
       <Events
         events={events}
         worldlines={worldlines}

@@ -25,7 +25,7 @@ const App = () => {
   const [mode, setMode] = useState<Mode>("idle");
   const [events, setEvents] = useState<EventNode[]>([]);
   const [worldlines, setWorldlines] = useState<WorldLine[]>([]);
-  const [velocity, setVelocity] = useState<Number>(0);
+  const [velocity, setVelocity] = useState<Number>(0.5);
 
   const deleteEvent = () => {
     setEvents(
@@ -77,6 +77,7 @@ const App = () => {
         setWorldlines={setWorldlines}
         mode={mode}
         setMode={setMode}
+        velocity={velocity}
       />
     </div>
   );
