@@ -94,18 +94,33 @@ export const Grid = ({
   };
 
   const handleKeyDown = (event) => {
-    //Temp hack solution so that the keydown won't trigger in the input box.
     if (event.target.id === "Eventname") return;
     if (["Backspace", "Delete"].includes(event.key)) {
       deleteStuff();
     }
   };
 
-  const GridRef = useRef(null)
+  const lorentz_factor = 1 / Math.sqrt(1 - Math.pow(velocity, 2));
+
+  const transform = (event) => {
+    const tempEvent = { ...event };
+    tempEvent.x = lorentz_factor * (event.x - velocity * event.t);
+    tempEvent.t = lorentz_factor * (event.t - velocity * event.x);
+    return tempEvent;
+  };
+
+  const transformedEvents = events.map((event) => {
+    return transform(event);
+  });
+  const transformedWorldlines = worldlines.map((worldline) => {
+    return {
+      source: transform(worldline.source),
+      target: transform(worldline.target),
+    };
+  });
 
   return (
     <svg
-      ref={GridRef}
       width={width}
       height={height}
       id="visualiser"
@@ -127,8 +142,8 @@ export const Grid = ({
       />
       <DragLine mode={mode} clickedEvent={clickedEvent} SpaceScale={SpaceScale} TimeScale={TimeScale}/>
       <Transformed 
-        events={events}
-        worldlines={worldlines}
+        events={transformedEvents}
+        worldlines={transformedWorldlines}
         velocity={velocity}
         SpaceScale={SpaceScale}
         TimeScale={TimeScale}

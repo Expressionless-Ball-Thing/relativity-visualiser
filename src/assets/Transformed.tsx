@@ -10,50 +10,33 @@ const Transformed = ({
 }) => {
   const svgRef = useRef(null);
 
-    useEffect(() => draw(), [events, worldlines, velocity])
+  useEffect(() => draw(), [events, worldlines, velocity])
 
-  const lorentz_factor = 1 / Math.sqrt(1 - Math.pow(velocity, 2));
+  console.log(events)
 
-  const transform = (event) => {
-    const tempEvent = { ...event };
-    tempEvent.x = lorentz_factor * (event.x - velocity * event.t);
-    tempEvent.t = lorentz_factor * (event.t - velocity * event.x);
-    return tempEvent;
-  };
-
-  const transformedEvents = events.map((event) => {
-    return transform(event);
-  });
-  const transformedWorldlines = worldlines.map((worldline) => {
-    return {
-      source: transform(worldline.source),
-      target: transform(worldline.target),
-    };
-  });
-
-  const event_array = transformedEvents.map(() => (
-    <circle key={Date.now().toString() + Math.random.toString()} />
+  const event_array = events.map((event) => (
+    <circle key={(Math.pow(2, event.x) * Math.pow(3, event.t)).toString()} />
   ));
-  const worldline_array = transformedWorldlines.map(() => (
-    <path key={Date.now().toString() + Math.random.toString()} />
+  const worldline_array = worldlines.map((worldline) => (
+    <path key={(Math.pow(2, worldline.source.x) * Math.pow(3, worldline.source.t) * Math.pow(5, worldline.target.x) * Math.pow(7, worldline.target.t)).toString()} />
   ));
 
   const draw = () => {
     d3.select(svgRef.current)
       .selectAll("circle")
-      .data(transformedEvents)
+      .data(events)
       .classed("node", true)
       .transition()
       .duration(1000)
       .attr("cx", (d) => SpaceScale(d.x))
       .attr("cy", (d) => TimeScale(d.t))
       .attr("r", 5)
-      .style("fill", "cbd1d8");
+      .attr("fill", "#cbd1d8");
 
     d3.select(svgRef.current)
       .selectAll("path")
       .classed("worldline", true)
-      .data(transformedWorldlines)
+      .data(worldlines)
       .transition()
       .duration(1000)
       .attr(
