@@ -16,7 +16,7 @@ const Transformed = ({
     <circle key={(Math.pow(2, event.id)).toString() + " transformed"} />
   ));
   const worldline_array = worldlines.map((worldline) => (
-    <path key={(Math.pow(2, worldline.source.id) * Math.pow(3, worldline.source.id)).toString() + " transformed"} />
+    <path key={(Math.pow(2, worldline.source.id) * Math.pow(3, worldline.target.id)).toString() + " transformed"} />
   ));
 
   const draw = () => {
@@ -47,7 +47,7 @@ const Transformed = ({
 
   return (
   <>
-  {(velocity === 1 || velocity === -1 )? "": <g className="transformed_stuff" ref={svgRef}>
+  {([-1, 1].includes(velocity))? "": <g className="transformed_stuff" ref={svgRef}>
     <g>
         {worldline_array}
     </g>

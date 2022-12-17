@@ -1,4 +1,4 @@
-import { Slider } from "@mui/material";
+import { Slider, TextField } from "@mui/material";
 import { WorldLine } from "../App";
 
 type interval = "Timelike" | "Spacelike" | "Lightlike"
@@ -64,17 +64,17 @@ export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEve
         <input type="checkbox" name="add" />
       </div>
       <div className="VelocityBar">
-      <Slider
-        size="small"
-        defaultValue={0}
-        aria-label="Small"
-        valueLabelDisplay="auto"
-        min={-1}
-        max={1}
-        step={0.00001}
-        value={velocity}
-        onChange={(_, newValue) => setVelocity(newValue)}
-      />
+        <Slider
+          size="small"
+          defaultValue={0}
+          aria-label="Small"
+          valueLabelDisplay="auto"
+          min={-1}
+          max={1}
+          step={0.00001}
+          value={velocity}
+          onChange={(_, newValue) => setVelocity(newValue)}
+        />
       </div>
     </div>
   );

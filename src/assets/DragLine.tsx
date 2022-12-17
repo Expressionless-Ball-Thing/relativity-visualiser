@@ -3,7 +3,6 @@ import * as d3 from "d3"
 
 const DragLine = ({mode, clickedEvent, SpaceScale, TimeScale}) => {
 
-    const DragLineRef = useRef(null)
     const [mouseEvent, setmouseEvent] = useState({x:0, y:0});
     
     useEffect(() => {

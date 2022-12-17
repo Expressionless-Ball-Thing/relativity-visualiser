@@ -94,7 +94,7 @@ export const Grid = ({
   };
 
   const handleKeyDown = (event) => {
-    if (event.target.id === "Eventname") return;
+    if (event.target.tagName === "INPUT") return;
     if (["Backspace", "Delete"].includes(event.key)) {
       deleteStuff();
     }
@@ -141,13 +141,13 @@ export const Grid = ({
         margin={margin}
       />
       <DragLine mode={mode} clickedEvent={clickedEvent} SpaceScale={SpaceScale} TimeScale={TimeScale}/>
-      {velocity !== 0 ? <Transformed 
+      <Transformed 
         events={transformedEvents}
         worldlines={transformedWorldlines}
         velocity={velocity}
         SpaceScale={SpaceScale}
         TimeScale={TimeScale}
-      /> : <></>}
+      />
       <WorldLines 
         worldlines={worldlines}
         SpaceScale={SpaceScale}
@@ -155,7 +155,6 @@ export const Grid = ({
         setClickedWorldLine={setClickedWorldLine}
         setClickedEvent={setClickedEvent}
         mode={mode}
-        setMode={setMode} 
         clickedWorldLine={clickedWorldLine}/>
       <Events
         events={events}

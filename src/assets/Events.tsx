@@ -17,6 +17,10 @@ const Events = ({
   setWorldlines,
 }) => {
   //const [tooltip, setTooltip] = useState<WorldLine| EventNode | boolean>(false);
+
+  const svgRef = useRef(null)
+  useEffect(() => draw(), [events, worldlines, clickedEvent, mode])
+
   const mouseoverEvent = (event) => {
     event.stopPropagation();
     event.target.style.stroke = "black";
@@ -54,24 +58,28 @@ const Events = ({
     setWorldlines(tempWorldlines);
   }
 
+  const circles = events.map((d: EventNode) => <circle key={(Math.pow(2, d.id)).toString()}/>)
+
+  const draw = () => {
+    d3.select(svgRef.current)
+      .selectAll("circle")
+      .data(events)
+      .attr("node", true)
+      .classed("selected", (d) => (d.id === clickedEvent.id))
+      .on("mouseover", (domEvent) => mouseoverEvent(domEvent))
+      .on("mouseleave", (domEvent) => mouseleaveEvent(domEvent))
+      .on("mouseup", (_, event) => mouseupEvent(event))
+      .on("mousedown", (_, event) => mousedownEvent(event))
+      .transition()
+      .attr("cx", (event) => SpaceScale(event.x))
+      .attr("cy", (event) => TimeScale(event.t))
+      .attr("fill", (event) => colorScale[event.id % colorScale.length])
+      .attr("r", 5)
+  }
+
   return (
-    <g>
-      {events.map((event: EventNode) => {
-        return (
-          <circle
-            id={event.id.toString()}
-            r={5}
-            cx={SpaceScale(event.x)}
-            cy={TimeScale(event.t)}
-            fill={colorScale[event.id % colorScale.length]}
-            className={`node ${event.id === clickedEvent.id ? "selected" : ""}`}
-            onMouseOver={(domEvent) => mouseoverEvent(domEvent)}
-            onMouseLeave={(domEvent) => mouseleaveEvent(domEvent)}
-            onMouseUp={() => mouseupEvent(event)}
-            onMouseDown={() => mousedownEvent(event)}
-          ></circle>
-        );
-      })}
+    <g ref={svgRef}>
+      {circles}
     </g>
   );
 };
