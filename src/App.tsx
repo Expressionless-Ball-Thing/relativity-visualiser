@@ -25,7 +25,7 @@ const App = () => {
   const [mode, setMode] = useState<Mode>("idle");
   const [events, setEvents] = useState<EventNode[]>([]);
   const [worldlines, setWorldlines] = useState<WorldLine[]>([]);
-  const [velocity, setVelocity] = useState<Number>(0);
+  const [velocity, setVelocity] = useState<number>(0);
 
   const deleteEvent = () => {
     setEvents(
@@ -57,6 +57,32 @@ const App = () => {
     setEvents(tempEvents);
   };
 
+  const recenter = () => {
+    const lorentz_factor = 1 / Math.sqrt(1 - Math.pow(velocity, 2));
+    const transform = (event) => {
+      const tempEvent = { ...event };
+      tempEvent.x = lorentz_factor * (event.x - velocity * event.t);
+      tempEvent.t = lorentz_factor * (event.t - velocity * event.x);
+      return tempEvent;
+    };
+  
+    const transformedEvents = events.map((event) => {
+      return transform(event);
+    });
+    const transformedWorldlines = worldlines.map((worldline) => {
+      return {
+        source: transform(worldline.source),
+        target: transform(worldline.target),
+      };
+    }); 
+
+    setEvents(transformedEvents)
+    setWorldlines(transformedWorldlines)
+    setClickedEvent(false)
+    setClickedWorldLine(false)
+    setVelocity(0)
+  }
+
   return (
     <div className="App">
       <ToolBar
@@ -67,6 +93,7 @@ const App = () => {
         updateEvent={updateEventName}
         setVelocity={setVelocity}
         velocity={velocity}
+        recenter={recenter}
       />
       <Grid
         events={events}

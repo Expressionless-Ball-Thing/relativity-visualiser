@@ -71,6 +71,7 @@ const Events = ({
       .on("mouseup", (_, event) => mouseupEvent(event))
       .on("mousedown", (_, event) => mousedownEvent(event))
       .transition()
+      .duration(500)
       .attr("cx", (event) => SpaceScale(event.x))
       .attr("cy", (event) => TimeScale(event.t))
       .attr("fill", (event) => colorScale[event.id % colorScale.length])

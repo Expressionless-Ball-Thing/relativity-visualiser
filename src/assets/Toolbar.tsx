@@ -19,7 +19,7 @@ const determineIntervalType = (worldLine: WorldLine): interval => {
 
 }
 
-export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEvent, deleteWorldLine, setVelocity, velocity }) => {
+export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEvent, deleteWorldLine, setVelocity, velocity, recenter }) => {
 
   const intervalType = clickedWorldline === false ? null : determineIntervalType(clickedWorldline);
 
@@ -62,6 +62,9 @@ export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEve
       <div className="Addbar">
         <span className="control_label move_event">Move Event:</span>
         <input type="checkbox" name="add" />
+      </div>
+      <div>
+        <button className="delete" name="recenter" onClick={recenter}>Recenter</button>
       </div>
       <div className="VelocityBar">
         <Slider
