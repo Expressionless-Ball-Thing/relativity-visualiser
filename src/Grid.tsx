@@ -141,13 +141,13 @@ export const Grid = ({
         margin={margin}
       />
       <DragLine mode={mode} clickedEvent={clickedEvent} SpaceScale={SpaceScale} TimeScale={TimeScale}/>
-      <Transformed 
+      {velocity !== 0 ? <Transformed 
         events={transformedEvents}
         worldlines={transformedWorldlines}
         velocity={velocity}
         SpaceScale={SpaceScale}
         TimeScale={TimeScale}
-      />
+      /> : <></>}
       <WorldLines 
         worldlines={worldlines}
         SpaceScale={SpaceScale}

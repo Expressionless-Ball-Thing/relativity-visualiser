@@ -12,8 +12,6 @@ const Transformed = ({
 
   useEffect(() => draw(), [events, worldlines, velocity])
 
-  console.log(events)
-
   const event_array = events.map((event) => (
     <circle key={(Math.pow(2, event.x) * Math.pow(3, event.t)).toString()} />
   ));
@@ -27,7 +25,7 @@ const Transformed = ({
       .data(events)
       .classed("node", true)
       .transition()
-      .duration(1000)
+      .duration(500)
       .attr("cx", (d) => SpaceScale(d.x))
       .attr("cy", (d) => TimeScale(d.t))
       .attr("r", 5)
@@ -38,7 +36,8 @@ const Transformed = ({
       .classed("worldline", true)
       .data(worldlines)
       .transition()
-      .duration(1000)
+      .duration(500)
+      .attr("stroke", "#1c0557")
       .attr(
         "d",
         (d) =>

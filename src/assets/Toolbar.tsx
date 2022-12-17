@@ -18,9 +18,20 @@ const determineIntervalType = (worldLine: WorldLine): interval => {
 
 }
 
-export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEvent, deleteWorldLine }) => {
+export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEvent, deleteWorldLine, setVelocity }) => {
 
   const intervalType = clickedWorldline === false ? null : determineIntervalType(clickedWorldline);
+
+  const determineNewVelocity = (worldline: WorldLine) => {
+    if (intervalType === "Timelike") {
+      setVelocity((worldline.target.x - worldline.source.x) / (worldline.target.t - worldline.source.t))
+    } else if (intervalType === "Spacelike") {
+      setVelocity((worldline.target.t - worldline.source.t) / (worldline.target.x - worldline.source.x))
+    } else {
+      alert("This interval is Lightlike") 
+    }
+    
+  }
 
   return (
     <div className="ToolBar">
@@ -32,7 +43,7 @@ export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEve
         <div className="control_label input_label">Event Name:</div>
 
         {clickedWorldline !== false ? 
-        <button className="transform" name="transform">Transform</button>
+        <button className="transform" name="transform" onClick={() => determineNewVelocity(clickedWorldline)}>Transform</button>
         :
         <input
           type="text"
