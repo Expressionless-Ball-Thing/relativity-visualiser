@@ -1,6 +1,10 @@
+import { Slider } from "@mui/material";
+import { scaleLinear } from "d3";
 import { WorldLine } from "../App";
 
 type interval = "Timelike" | "Spacelike" | "Lightlike"
+
+const velocityScale = scaleLinear().domain([-300000000, 300000000]).range([-1, 1])
 
 const determineIntervalType = (worldLine: WorldLine): interval => {
   let interval_time = worldLine.target.t - worldLine.source.t 
@@ -61,6 +65,17 @@ export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEve
       <div className="Addbar">
         <span className="control_label move_event">Move Event:</span>
         <input type="checkbox" name="add" />
+      </div>
+      <div className="VelocityBar">
+      <Slider
+        size="small"
+        defaultValue={0}
+        aria-label="Small"
+        valueLabelDisplay="auto"
+        min={-300000000}
+        max={300000000}
+        onChange={(_, newValue) => setVelocity(velocityScale(newValue))}
+      />
       </div>
     </div>
   );

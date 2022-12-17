@@ -37,6 +37,10 @@
   stroke-width: 2;
 }
 
+.transformed_stuff {
+  stroke: turquoise;
+}
+
 .hidden {
   visibility: hidden;
 }
@@ -57,10 +61,17 @@
 
 
 .ToolBar {
+  margin-top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
+}
+
+.VelocityBar {
+  margin: 0 20px;
+  width: 500px;
+  height: 25px;
 }
 
 .control_label {

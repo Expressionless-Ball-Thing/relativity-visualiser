@@ -33,11 +33,9 @@ const Transformed = ({
 
     d3.select(svgRef.current)
       .selectAll("path")
-      .classed("worldline", true)
       .data(worldlines)
       .transition()
       .duration(500)
-      .attr("stroke", "#1c0557")
       .attr(
         "d",
         (d) =>
@@ -47,14 +45,18 @@ const Transformed = ({
       );
   };
 
-  return (<g className="transformed_stuff" ref={svgRef}>
+  return (
+  <>
+  {(velocity === 1 || velocity === -1 )? "": <g className="transformed_stuff" ref={svgRef}>
     <g>
         {worldline_array}
     </g>
     <g>
         {event_array}
     </g>
-  </g>);
+  </g>};
+  </>
+  )
 };
 
 export default Transformed;
