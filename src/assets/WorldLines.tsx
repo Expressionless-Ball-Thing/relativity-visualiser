@@ -2,17 +2,16 @@ import { WorldLine } from "../App";
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
 const WorldLines = ({
-  worldlines,
+  items,
   SpaceScale,
   TimeScale,
-  setClickedEvent,
-  clickedWorldLine,
-  setClickedWorldLine,
+  setClicked,
+  clicked,
   mode,
 }) => {
   const svgRef = useRef(null);
 
-  useEffect(() => draw(), [worldlines, clickedWorldLine, mode]);
+  useEffect(() => draw(), [items, clicked.worldline, mode]);
 
   const mouseoverWorldLine = (event) => {
     if (mode === "idle") {
@@ -31,11 +30,10 @@ const WorldLines = ({
     }
   };
   const mousedownWorldLine = (worldline) => {
-    setClickedWorldLine(worldline);
-    setClickedEvent(false);
+    setClicked({worldline: worldline, event: null})
   };
 
-  const lines = worldlines.map((worldline: WorldLine) => (
+  const lines = items.worldlines.map((worldline: WorldLine) => (
     <path
       key={(
         Math.pow(2, worldline.source.id) * Math.pow(3, worldline.target.id)
@@ -46,9 +44,9 @@ const WorldLines = ({
   const draw = () => {
     d3.select(svgRef.current)
       .selectAll("path")
-      .data(worldlines)
+      .data(items.worldlines)
       .classed("worldline", true)
-      .classed("selected", (worldline) => worldline === clickedWorldLine)
+      .classed("selected", (worldline) => worldline === clicked.worldline)
       .on("mouseover", (event) => mouseoverWorldLine(event))
       .on("mouseleave", (event) => mouseleaveWorldLine(event))
       .on("mousedown", (_, worldline) => mousedownWorldLine(worldline))

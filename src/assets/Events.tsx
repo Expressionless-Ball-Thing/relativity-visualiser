@@ -1,27 +1,24 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
-import { EventNode, WorldLine } from "../App";
+import { EventNode } from "../App";
 
 const colorScale = d3.schemePaired;
 
 const radius = 5
 
 const Events = ({
-  events,
-  worldlines,
+  items,
   SpaceScale,
   TimeScale,
-  clickedEvent,
-  setClickedEvent,
-  setClickedWorldLine,
+  clicked,
+  setClicked,
   mode,
   setMode,
-  setWorldlines,
+  setItems
 }) => {
-  //const [tooltip, setTooltip] = useState<WorldLine| EventNode | boolean>(false);
 
   const svgRef = useRef(null)
-  useEffect(() => draw(), [events, worldlines, clickedEvent, mode])
+  useEffect(() => draw(), [items, clicked.event, mode])
 
   const mouseoverEvent = (event, component) => {
     event.stopPropagation();
@@ -47,37 +44,37 @@ const Events = ({
   };
 
   const mousedownEvent = (event) => {
-    setClickedWorldLine(false);
-    setClickedEvent(event);
+    setClicked({worldline: null, event: event})
     if (mode === "idle") {
       setMode("dragLine");
     }
   };
 
+
   const mouseupEvent = (event: EventNode) => {
-    const tempWorldlines = [...worldlines];
+    const tempWorldlines = [...items.worldlines];
     const newline: object = {
-      source: clickedEvent,
+      source: clicked.event,
       target: event,
     };
-    const inplaceWorldLine = tempWorldlines.filter((l) => ((l.source === clickedEvent && l.target === event) || (l.target === clickedEvent && l.source === event)))
-    if (inplaceWorldLine.length > 0 || clickedEvent === event) {
+    const inplaceWorldLine = tempWorldlines.filter((l) => ((l.source === clicked.event && l.target === event) || (l.target === clicked.event && l.source === event)))
+    if (inplaceWorldLine.length > 0 || clicked.event === event) {
       return;
     }
     tempWorldlines.push(newline);
-    setClickedEvent(event);
+    setClicked({...clicked, event: event})
+    setItems({...items, worldlines: tempWorldlines})
     setMode("idle");
-    setWorldlines(tempWorldlines);
   }
 
-  const circles = events.map((d: EventNode) => <circle key={(Math.pow(2, d.id)).toString()}/>)
+  const circles = items.events.map((d: EventNode) => <circle key={(Math.pow(2, d.id)).toString()}/>)
 
   const draw = () => {
     d3.select(svgRef.current)
       .selectAll("circle")
-      .data(events)
+      .data(items.events)
       .classed("node", true)
-      .classed("selected", (d) => (d === clickedEvent))
+      .classed("selected", (d) => (d === clicked.event))
       .on("mouseover", (domEvent, component) => mouseoverEvent(domEvent, component))
       .on("mouseleave", (domEvent) => mouseleaveEvent(domEvent))
       .on("mouseup", (_, event) => mouseupEvent(event))

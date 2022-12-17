@@ -19,9 +19,9 @@ const determineIntervalType = (worldLine: WorldLine): interval => {
 
 }
 
-export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEvent, deleteWorldLine, setVelocity, velocity, recenter }) => {
+export const ToolBar = ({ clicked, updateEvent, deleteStuff, setVelocity, velocity, recenter }) => {
 
-  const intervalType = clickedWorldline === false ? null : determineIntervalType(clickedWorldline);
+  const intervalType = clicked.worldline === null ? null : determineIntervalType(clicked.worldline);
 
   const determineNewVelocity = (worldline: WorldLine) => {
     if (intervalType === "Timelike") {
@@ -38,23 +38,23 @@ export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEve
     <div className="ToolBar">
       <div className="Typebar">
         <span className="control_label type">Type:</span>
-        <span className="label_type">{clickedEvent !== false ? "Event" : clickedWorldline !== false ? `${intervalType} interval`: "N/A"}</span>
+        <span className="label_type">{clicked.event !== null ? "Event" : clicked.worldline !== null ? `${intervalType} interval`: "N/A"}</span>
       </div>
       <div className="Namebar">
         <div className="control_label input_label">Event Name:</div>
 
-        {clickedWorldline !== false ? 
-        <button className="transform" name="transform" onClick={() => determineNewVelocity(clickedWorldline)}>Transform</button>
+        {clicked.worldline !== null ?
+        <button className="transform" name="transform" onClick={() => determineNewVelocity(clicked.worldline)}>Transform</button>
         :
         <input
           type="text"
-          value={clickedEvent.name}
+          value={clicked.event === null ? "" : clicked.event.name}
           onChange={updateEvent}
-          disabled={clickedEvent === false ? true : false}
+          disabled={clicked.event === null ? true : false}
         />
         }
 
-        <button className="delete" name="delete" onClick={clickedEvent !== false ? deleteEvent : deleteWorldLine}>
+        <button className="delete" name="delete" onClick={deleteStuff}>
           delete
         </button>
       </div>

@@ -2,27 +2,26 @@ import * as d3 from "d3";
 import { useEffect, useRef } from "react";
 
 const Transformed = ({
-  events,
-  worldlines,
+  transformedItems,
   velocity,
   SpaceScale,
   TimeScale,
 }) => {
   const svgRef = useRef(null);
-  useEffect(() => draw(), [events, worldlines, velocity])
+  useEffect(() => draw(), [transformedItems, velocity])
 
 
-  const event_array = events.map((event) => (
+  const event_array = transformedItems.events.map((event) => (
     <circle key={(Math.pow(2, event.id)).toString() + " transformed"} />
   ));
-  const worldline_array = worldlines.map((worldline) => (
+  const worldline_array = transformedItems.worldlines.map((worldline) => (
     <path key={(Math.pow(2, worldline.source.id) * Math.pow(3, worldline.target.id)).toString() + " transformed"} />
   ));
 
   const draw = () => {
     d3.select(svgRef.current)
       .selectAll("circle")
-      .data(events)
+      .data(transformedItems.events)
       .classed("node", true)
       .transition()
       .duration(500)
@@ -33,7 +32,7 @@ const Transformed = ({
 
     d3.select(svgRef.current)
       .selectAll("path")
-      .data(worldlines)
+      .data(transformedItems.worldlines)
       .transition()
       .duration(500)
       .attr(
