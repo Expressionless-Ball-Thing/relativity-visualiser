@@ -4,6 +4,8 @@ import { EventNode, WorldLine } from "../App";
 
 const colorScale = d3.schemePaired;
 
+const radius = 5
+
 const Events = ({
   events,
   worldlines,
@@ -21,17 +23,27 @@ const Events = ({
   const svgRef = useRef(null)
   useEffect(() => draw(), [events, worldlines, clickedEvent, mode])
 
-  const mouseoverEvent = (event) => {
+  const mouseoverEvent = (event, component) => {
     event.stopPropagation();
     event.target.style.stroke = "black";
     event.target.style.strokeWidth = 2;
     document.body.style.cursor = "pointer";
+    if (mode === "dragLine") {
+      d3.select(event.target)
+      .transition()
+      .attr("r", radius * 1.5)
+    }
   };
 
   const mouseleaveEvent = (event) => {
     event.stopPropagation();
     event.target.style = "";
     document.body.style.cursor = "";
+    if (mode === "dragLine") {
+      d3.select(event.target)
+      .transition()
+      .attr("r", radius)
+    }
   };
 
   const mousedownEvent = (event) => {
@@ -66,7 +78,7 @@ const Events = ({
       .data(events)
       .classed("node", true)
       .classed("selected", (d) => (d === clickedEvent))
-      .on("mouseover", (domEvent) => mouseoverEvent(domEvent))
+      .on("mouseover", (domEvent, component) => mouseoverEvent(domEvent, component))
       .on("mouseleave", (domEvent) => mouseleaveEvent(domEvent))
       .on("mouseup", (_, event) => mouseupEvent(event))
       .on("mousedown", (_, event) => mousedownEvent(event))
@@ -75,7 +87,7 @@ const Events = ({
       .attr("cx", (event) => SpaceScale(event.x))
       .attr("cy", (event) => TimeScale(event.t))
       .attr("fill", (event) => colorScale[event.id % colorScale.length])
-      .attr("r", 5)
+      .attr("r", radius)
   }
 
   return (

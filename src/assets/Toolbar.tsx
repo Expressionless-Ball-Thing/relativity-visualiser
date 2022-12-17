@@ -83,7 +83,7 @@ export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEve
           max="1"
           id="Eventname"
           value={velocity}
-          onChangeCapture={(event) => setVelocity(event.target.value)}
+          onChange={(event) => setVelocity(event.target.value)}
         />
       </div>
     </div>
