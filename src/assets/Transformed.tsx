@@ -9,14 +9,14 @@ const Transformed = ({
   TimeScale,
 }) => {
   const svgRef = useRef(null);
-
   useEffect(() => draw(), [events, worldlines, velocity])
 
+
   const event_array = events.map((event) => (
-    <circle key={(Math.pow(2, event.x) * Math.pow(3, event.t)).toString()} />
+    <circle key={(Math.pow(2, event.id)).toString() + " transformed"} />
   ));
   const worldline_array = worldlines.map((worldline) => (
-    <path key={(Math.pow(2, worldline.source.x) * Math.pow(3, worldline.source.t) * Math.pow(5, worldline.target.x) * Math.pow(7, worldline.target.t)).toString()} />
+    <path key={(Math.pow(2, worldline.source.id) * Math.pow(3, worldline.source.id)).toString() + " transformed"} />
   ));
 
   const draw = () => {

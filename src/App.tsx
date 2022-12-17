@@ -66,6 +66,7 @@ const App = () => {
         deleteWorldLine={deleteWorldLine}
         updateEvent={updateEventName}
         setVelocity={setVelocity}
+        velocity={velocity}
       />
       <Grid
         events={events}
