@@ -48,8 +48,7 @@ export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEve
         :
         <input
           type="text"
-          id="Eventname"
-          placeholder={clickedEvent.name}
+          value={clickedEvent.name}
           onChange={updateEvent}
           disabled={clickedEvent === false ? true : false}
         />
@@ -77,6 +76,14 @@ export const ToolBar = ({ clickedEvent, clickedWorldline, deleteEvent, updateEve
           step={0.00001}
           value={velocity}
           onChange={(_, newValue) => setVelocity(newValue)}
+        />
+        <input
+          type="number"
+          min="-1"
+          max="1"
+          id="Eventname"
+          value={velocity}
+          onChangeCapture={(event) => setVelocity(event.target.value)}
         />
       </div>
     </div>
