@@ -13,20 +13,31 @@ const WorldLines = ({
 
   useEffect(() => draw(), [items, clicked.worldline, mode]);
 
-  const mouseoverWorldLine = (event) => {
+  const mouseoverWorldLine = (event, worldline) => {
     if (mode === "idle") {
       event.stopPropagation();
       event.target.style.stroke = "red";
       event.target.style.strokeWidth = 5;
       document.body.style.cursor = "pointer";
+
+      d3.selectAll(".transformed_stuff path")
+        .filter((d) => (d.source.id === worldline.source.id && d.target.id === worldline.target.id))
+        .transition()
+        .style("stroke", "black")
     }
   };
 
-  const mouseleaveWorldLine = (event) => {
+  const mouseleaveWorldLine = (event, worldline) => {
     if (mode === "idle") {
       event.stopPropagation();
       event.target.style = "";
       document.body.style.cursor = "";
+
+      d3.selectAll(".transformed_stuff path")
+        .filter((d) => (d.source.id === worldline.source.id && d.target.id === worldline.target.id))
+        .transition()
+        .style("stroke", "turquoise")
+
     }
   };
   const mousedownWorldLine = (worldline) => {
@@ -47,8 +58,8 @@ const WorldLines = ({
       .data(items.worldlines)
       .classed("worldline", true)
       .classed("selected", (worldline) => worldline === clicked.worldline)
-      .on("mouseover", (event) => mouseoverWorldLine(event))
-      .on("mouseleave", (event) => mouseleaveWorldLine(event))
+      .on("mouseover", (event, worldline) => mouseoverWorldLine(event, worldline))
+      .on("mouseleave", (event, worldline) => mouseleaveWorldLine(event, worldline))
       .on("mousedown", (_, worldline) => mousedownWorldLine(worldline))
       .transition()
       .duration(500)

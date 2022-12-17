@@ -12,10 +12,10 @@ const Transformed = ({
 
 
   const event_array = transformedItems.events.map((event) => (
-    <circle key={(Math.pow(2, event.id)).toString() + " transformed"} />
+    <circle id={(Math.pow(2, event.id)).toString() + " transformed"} key={(Math.pow(2, event.id)).toString() + " transformed"} />
   ));
   const worldline_array = transformedItems.worldlines.map((worldline) => (
-    <path key={(Math.pow(2, worldline.source.id) * Math.pow(3, worldline.target.id)).toString() + " transformed"} />
+    <path id={(Math.pow(2, worldline.source.id) * Math.pow(3, worldline.target.id)).toString() + " transformed"} key={(Math.pow(2, worldline.source.id) * Math.pow(3, worldline.target.id)).toString() + " transformed"} />
   ));
 
   const draw = () => {

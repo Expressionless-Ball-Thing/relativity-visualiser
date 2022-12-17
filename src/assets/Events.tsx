@@ -29,10 +29,15 @@ const Events = ({
       d3.select(event.target)
       .transition()
       .attr("r", radius * 1.5)
+    } else if (mode === "idle") {
+      d3.selectAll(".transformed_stuff circle")
+        .filter((d) => d.id === component.id)
+        .transition()
+        .style("fill", "black")
     }
   };
 
-  const mouseleaveEvent = (event) => {
+  const mouseleaveEvent = (event, component) => {
     event.stopPropagation();
     event.target.style = "";
     document.body.style.cursor = "";
@@ -41,6 +46,10 @@ const Events = ({
       .transition()
       .attr("r", radius)
     }
+    d3.selectAll(".transformed_stuff circle")
+      .filter((d) => d.id === component.id)
+      .transition()
+      .style("fill", "#cbd1d8");
   };
 
   const mousedownEvent = (event) => {
@@ -76,7 +85,7 @@ const Events = ({
       .classed("node", true)
       .classed("selected", (d) => (d === clicked.event))
       .on("mouseover", (domEvent, component) => mouseoverEvent(domEvent, component))
-      .on("mouseleave", (domEvent) => mouseleaveEvent(domEvent))
+      .on("mouseleave", (domEvent, component) => mouseleaveEvent(domEvent, component))
       .on("mouseup", (_, event) => mouseupEvent(event))
       .on("mousedown", (_, event) => mousedownEvent(event))
       .transition()
