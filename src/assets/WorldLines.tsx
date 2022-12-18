@@ -8,6 +8,7 @@ const WorldLines = ({
   setClicked,
   clicked,
   mode,
+  setTooltip
 }) => {
   const svgRef = useRef(null);
 
@@ -28,6 +29,8 @@ const WorldLines = ({
         )
         .transition()
         .style("stroke", "black");
+      
+      setTooltip({type: "worldline", data: worldline, position: d3.pointer(event)})
     }
   };
 
@@ -45,6 +48,7 @@ const WorldLines = ({
         )
         .transition()
         .style("stroke", "turquoise");
+      setTooltip({type: null, data: null, position: null})
     }
   };
   const mousedownWorldLine = (worldline: WorldLine) => {

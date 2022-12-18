@@ -11,6 +11,7 @@ export interface EventNode {
 }
 
 export interface WorldLine {
+  name: String;
   source: EventNode;
   target: EventNode;
 }
@@ -64,14 +65,27 @@ const App = () => {
   };
 
   const updateEventName = (event: Event) => {
-    let tempEvents = [...items.events];
-    for (let i: number = 0; i < events.length; i++) {
-      if (tempEvents[i].id === clickedEvent.id) {
-        tempEvents[i].name = event.target.value;
-        break;
+    if (clicked.event !== null) {
+      let tempEvents = [...items.events];
+      for (let i: number = 0; i < tempEvents.length; i++) {
+        if (tempEvents[i].id === clicked.event.id) {
+          tempEvents[i].name = event.target.value;
+          setItems({...items, events: tempEvents})
+          return;
+        }
+      }
+    } else if (clicked.worldline !== null) {
+      let tempWorldlines = [...items.worldlines];
+      for (let i: number = 0; i < tempWorldlines.length; i++) {
+        if (tempWorldlines[i].source === clicked.worldline.source && tempWorldlines[i].target === clicked.worldline.target) {
+          tempWorldlines[i].name = event.target.value;
+          setItems({...items, worldlines: tempWorldlines})
+          return;
+        }
       }
     }
-    setItems({...items, events: tempEvents});
+
+    ;
   };
   const lorentz_factor = 1 / Math.sqrt(1 - Math.pow(velocity, 2));
   const transform = (event) => {

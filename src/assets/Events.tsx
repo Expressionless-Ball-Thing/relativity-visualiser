@@ -14,7 +14,8 @@ const Events = ({
   setClicked,
   mode,
   setMode,
-  setItems
+  setItems,
+  setTooltip
 }) => {
   const svgRef = useRef(null)
   useEffect(() => draw(), [items, clicked.event, mode])
@@ -32,7 +33,8 @@ const Events = ({
       d3.selectAll(".transformed_stuff circle")
         .filter((d) => d.id === component.id)
         .transition()
-        .style("fill", "black")
+        .style("fill", "black");
+      setTooltip({type: "event", data: component, position: d3.pointer(event)})
     }
   };
 
@@ -49,6 +51,7 @@ const Events = ({
       .filter((d) => d.id === component.id)
       .transition()
       .style("fill", "#cbd1d8");
+    setTooltip({type: null, data: null, position: null})
   };
 
   const mousedownEvent = (event) => {
