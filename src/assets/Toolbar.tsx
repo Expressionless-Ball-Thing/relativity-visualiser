@@ -3,7 +3,7 @@ import { WorldLine } from "../App";
 
 type interval = "Timelike" | "Spacelike" | "Lightlike"
 
-const determineIntervalType = (worldLine: WorldLine): interval => {
+export const determineIntervalType = (worldLine: WorldLine): interval => {
   let interval_time = worldLine.target.t - worldLine.source.t 
   let interval_space = worldLine.target.x - worldLine.source.x
 

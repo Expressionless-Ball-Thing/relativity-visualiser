@@ -1,10 +1,11 @@
-import { scaleLinear } from "d3";
-import { useEffect } from "react";
+import * as d3 from "d3";
+import { useEffect, useRef, useState } from "react";
 import { EventNode, WorldLine } from "./App";
 import DragLine from "./assets/DragLine";
 import Events from "./assets/Events";
 import { SpaceAxis } from "./assets/SpaceAxis";
 import { TimeAxis } from "./assets/TimeAxis";
+import { determineIntervalType } from "./assets/Toolbar";
 import Transformed from "./assets/Transformed";
 import WorldLines from "./assets/WorldLines";
 
@@ -18,6 +19,33 @@ export interface Margin {
 const width: number = 1000;
 const height: number = 1000;
 const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+const SpaceScale = d3.scaleLinear([10, -10], [width - margin.right, margin.left])
+const TimeScale = d3.scaleLinear([-10, 10],[height - margin.bottom, margin.top])
+
+interface Tooltip {
+  type: "event" | "worldline" | null
+  data: EventNode | WorldLine | null
+  position: number[] | null
+}
+
+const Tooltip = ({tooltipdata}) => {
+  return (<foreignObject x={tooltipdata.position[0] + 10} y={tooltipdata.position[1] + 10} width={100} height={100}>
+    <div className="tooltip">
+    {tooltipdata.type === "event" ? <>
+      <strong>{tooltipdata.data.name}</strong>
+      <br/>
+      x: {tooltipdata.data.x}
+      <br/>
+      t: {tooltipdata.data.t}
+      </>
+    
+    : 
+      `Interval Type: ${determineIntervalType(tooltipdata.data)}`
+    }
+    </div>
+  </foreignObject>
+  )
+};
 
 export const Grid = ({
   items,
@@ -30,8 +58,9 @@ export const Grid = ({
   deleteStuff,
   transformedItems
 }) => {
-  const SpaceScale = scaleLinear([10, -10], [width - margin.right, margin.left])
-  const TimeScale = scaleLinear([-10, 10],[height - margin.bottom, margin.top])
+
+
+  const [tooltip, settooltip] = useState<Tooltip>({type: null, data: null, position: null})
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -92,6 +121,7 @@ export const Grid = ({
   };
 
   return (
+    <>
     <svg
       width={width}
       height={height}
@@ -131,6 +161,7 @@ export const Grid = ({
         setClicked={setClicked}
         mode={mode}
         clicked={clicked}
+        setTooltip={settooltip}
       />
       <Events
         items={items}
@@ -141,7 +172,11 @@ export const Grid = ({
         mode={mode}
         setMode={setMode}
         setItems={setItems}
+        setTooltip={settooltip}
+
       />
+      {tooltip.type === null ? "" : <Tooltip tooltipdata={tooltip}/>}
     </svg>
+    </>
   );
 };

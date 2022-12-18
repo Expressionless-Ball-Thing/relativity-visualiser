@@ -65,8 +65,8 @@ const App = () => {
 
   const updateEventName = (event: Event) => {
     let tempEvents = [...items.events];
-    for (let i: number = 0; i < events.length; i++) {
-      if (tempEvents[i].id === clickedEvent.id) {
+    for (let i: number = 0; i < tempEvents.length; i++) {
+      if (tempEvents[i].id === clicked.event.id) {
         tempEvents[i].name = event.target.value;
         break;
       }
