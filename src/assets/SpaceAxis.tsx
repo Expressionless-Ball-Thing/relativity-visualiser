@@ -22,7 +22,7 @@ export const SpaceAxis = ({ height, width, margin, SpaceScale}: {height: number,
       <text
         className="axis-label"
         textAnchor="middle"
-        transform={`translate(${width - margin.left - margin.right - 50} , -5)`}
+        transform={`translate(${width - margin.left - margin.right - 70} , -5)`}
       >
         X(lightseconds)
       </text>

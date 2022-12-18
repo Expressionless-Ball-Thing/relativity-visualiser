@@ -76,7 +76,7 @@ export const ToolBar = ({ clicked, updateEvent, deleteStuff, setVelocity, veloci
           valueLabelDisplay="auto"
           min={-1}
           max={1}
-          step={0.00001}
+          step={0.01}
           value={velocity}
           onChange={(_, newValue) => setVelocity(newValue)}
         />

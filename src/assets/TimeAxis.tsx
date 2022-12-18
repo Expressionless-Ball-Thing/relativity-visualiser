@@ -1,5 +1,4 @@
 import { ScaleLinear } from "d3";
-import React from "react";
 import { Margin } from "../Grid";
 
 export const TimeAxis = ({ height, width, margin, TimeScale} : {height: number, width: number, margin: Margin, TimeScale: ScaleLinear<Number, Number, never>}) => {
@@ -22,7 +21,7 @@ export const TimeAxis = ({ height, width, margin, TimeScale} : {height: number, 
       <text
         className="axis-label"
         textAnchor="middle"
-        transform={`translate(${-20}, ${(height - margin.top - margin.bottom) / 4 - 50}) rotate(-90)`}
+        transform={`translate(${-20}, ${(height - margin.top - margin.bottom) / 8 - 50}) rotate(-90)`}
       >
         Y(seconds)
       </text>
