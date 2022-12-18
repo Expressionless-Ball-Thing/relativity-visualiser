@@ -31,11 +31,11 @@ interface Tooltip {
 const Tooltip = ({tooltipdata}) => {
   return (<foreignObject x={tooltipdata.position[0] + 10} y={tooltipdata.position[1] + 10} width={100} height={100}>
     <div className="tooltip">
-    {tooltipdata.type === "event" ? <>
       <strong>{tooltipdata.data.name}</strong>
-      <br/>
+      <hr/>
+    {tooltipdata.type === "event" ? <>
       x: {Math.round(tooltipdata.data.x * 1000) / 1000}
-      <br/>
+      <hr/>
       t: {Math.round(tooltipdata.data.t * 1000) / 1000}
       </>
     
