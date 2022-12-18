@@ -37,13 +37,16 @@
   stroke-width: 2;
 }
 
+.transformed_stuff {
+  stroke: turquoise;
+}
+
 .hidden {
   visibility: hidden;
 }
 
 .worldline.selected {
   stroke: red;
-  stroke-dasharray: 10,2;
 }
 
 .tooltip {
@@ -57,10 +60,20 @@
 
 
 .ToolBar {
+  margin-top: 20px;
+  margin-bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
+}
+
+.VelocityBar {
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px;
+  width: 500px;
+  height: 25px;
 }
 
 .control_label {

@@ -1,38 +1,37 @@
 import { scaleLinear } from "d3";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { EventNode, WorldLine } from "./App";
 import DragLine from "./assets/DragLine";
 import Events from "./assets/Events";
 import { SpaceAxis } from "./assets/SpaceAxis";
 import { TimeAxis } from "./assets/TimeAxis";
+import Transformed from "./assets/Transformed";
 import WorldLines from "./assets/WorldLines";
 
 export interface Margin {
-  top: number, right: number, bottom: number, left: number
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
 }
 
-export const Grid = ({
-  events,
-  clickedEvent,
-  setClickedEvent,
-  setEvents,
-  setWorldlines,
-  worldlines,
-  clickedWorldLine,
-  setClickedWorldLine,
-  mode,
-  setMode
-}) => {
+const width: number = 1000;
+const height: number = 1000;
+const margin = { top: 20, right: 20, bottom: 20, left: 20 };
 
-  const width: number = 1000;
-  const height: number = 1000;
-  const margin = { top: 20, right: 20, bottom: 20, left: 20 };
-  const SpaceScale = scaleLinear()
-    .domain([10, -10])
-    .range([width - margin.right, margin.left]);
-  const TimeScale = scaleLinear()
-    .domain([-10, 10])
-    .range([height - margin.bottom, margin.top]);
+export const Grid = ({
+  items,
+  clicked,
+  setClicked,
+  setItems,
+  mode,
+  setMode,
+  velocity,
+  deleteStuff,
+  transformedItems
+}) => {
+  const SpaceScale = scaleLinear([10, -10], [width - margin.right, margin.left])
+  const TimeScale = scaleLinear([-10, 10],[height - margin.bottom, margin.top])
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -41,18 +40,27 @@ export const Grid = ({
       document.removeEventListener("keydown", handleKeyDown);
       document.addEventListener("mouseup", () => setMode("idle"));
     };
-  }, [clickedEvent, clickedWorldLine]);
-
+  }, [clicked, items]);
 
   const addEvent = (event) => {
     let currentTargetRect = event.currentTarget.getBoundingClientRect();
     let left = event.clientX - currentTargetRect.left;
-    let top = event.clientY - currentTargetRect.top
-    if (left < margin.left || left > width - margin.right || top < margin.top || top > height - margin.bottom) return;
+    let top = event.clientY - currentTargetRect.top;
+    if (
+      left < margin.left ||
+      left > width - margin.right ||
+      top < margin.top ||
+      top > height - margin.bottom
+    )
+      return;
 
-    let lastnodeId = events.reduce(function(acc: number, currevent : EventNode){
+    let lastnodeId = items.events.reduce(function (
+      acc: number,
+      currevent: EventNode
+    ) {
       return currevent.id > acc ? currevent.id : acc;
-    }, 0);
+    },
+    0);
 
     const newEvent = {
       id: lastnodeId + 1,
@@ -60,11 +68,11 @@ export const Grid = ({
       x: Math.round(SpaceScale.invert(left) * 10) / 10,
       t: Math.round(TimeScale.invert(top) * 10) / 10,
     };
-    const tempEvent = [...events];
-    tempEvent.push(newEvent);
-    setClickedEvent(newEvent)
-    setEvents(tempEvent);
-  }
+    const tempEvents = [...items.events];
+    tempEvents.push(newEvent);
+    setClicked({ ...clicked, event: newEvent });
+    setItems({...items, events: tempEvents});
+  };
 
   const handleClick = (event) => {
     switch (event.detail) {
@@ -76,39 +84,21 @@ export const Grid = ({
     }
   };
 
-  const deleteStuff = () => {
-    if (clickedEvent !== false) {
-      setEvents(events.filter((event: EventNode) => event.id !== clickedEvent.id));
-      setWorldlines(worldlines.filter((event: WorldLine) => event.source !== clickedEvent && event.target !== clickedEvent))  
-    } else {
-      const tempWorldlines = worldlines.filter((worldline: WorldLine) => {
-        return !((worldline.source === clickedWorldLine.source && worldline.target === clickedWorldLine.target) || (worldline.source === clickedWorldLine.target && worldline.target === clickedWorldLine.source))  
-      })
-      setWorldlines(tempWorldlines);
-    }
-    setClickedEvent(false)
-    setClickedWorldLine(false)
-  };
-
   const handleKeyDown = (event) => {
-    //Temp hack solution so that the keydown won't trigger in the input box.
-    if (event.target.id === "Eventname") return;
+    if (event.target.tagName === "INPUT") return;
     if (["Backspace", "Delete"].includes(event.key)) {
       deleteStuff();
     }
   };
 
-  const GridRef = useRef(null)
-
   return (
     <svg
-      ref={GridRef}
       width={width}
       height={height}
       id="visualiser"
       onClick={handleClick}
-      onMouseOver={() => document.body.style.cursor = "crosshair"}
-      onMouseLeave={() => document.body.style.cursor = ""}
+      onMouseOver={() => (document.body.style.cursor = "crosshair")}
+      onMouseLeave={() => (document.body.style.cursor = "")}
     >
       <SpaceAxis
         SpaceScale={SpaceScale}
@@ -122,27 +112,35 @@ export const Grid = ({
         width={width}
         margin={margin}
       />
-      <DragLine mode={mode} clickedEvent={clickedEvent} SpaceScale={SpaceScale} TimeScale={TimeScale}/>
-      <WorldLines 
-        worldlines={worldlines}
-        SpaceScale={SpaceScale}
-        TimeScale={TimeScale}
-        setClickedWorldLine={setClickedWorldLine}
-        setClickedEvent={setClickedEvent}
+      <DragLine
         mode={mode}
-        setMode={setMode} 
-        clickedWorldLine={clickedWorldLine}      />
-      <Events
-        events={events}
-        worldlines={worldlines}
+        clicked={clicked}
         SpaceScale={SpaceScale}
         TimeScale={TimeScale}
-        clickedEvent={clickedEvent}
-        setClickedEvent={setClickedEvent}
-        setClickedWorldLine={setClickedWorldLine}
+      />
+      <Transformed
+        transformedItems={transformedItems}
+        velocity={velocity}
+        SpaceScale={SpaceScale}
+        TimeScale={TimeScale}
+      />
+      <WorldLines
+        items={items}
+        SpaceScale={SpaceScale}
+        TimeScale={TimeScale}
+        setClicked={setClicked}
+        mode={mode}
+        clicked={clicked}
+      />
+      <Events
+        items={items}
+        SpaceScale={SpaceScale}
+        TimeScale={TimeScale}
+        clicked={clicked}
+        setClicked={setClicked}
         mode={mode}
         setMode={setMode}
-        setWorldlines={setWorldlines}
+        setItems={setItems}
       />
     </svg>
   );
