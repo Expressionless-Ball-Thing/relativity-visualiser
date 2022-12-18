@@ -1,5 +1,5 @@
 import { scaleLinear } from "d3";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { EventNode, WorldLine } from "./App";
 import DragLine from "./assets/DragLine";
 import Events from "./assets/Events";
@@ -27,14 +27,11 @@ export const Grid = ({
   mode,
   setMode,
   velocity,
-  deleteStuff
+  deleteStuff,
+  transformedItems
 }) => {
-  const SpaceScale = scaleLinear()
-    .domain([10, -10])
-    .range([width - margin.right, margin.left]);
-  const TimeScale = scaleLinear()
-    .domain([-10, 10])
-    .range([height - margin.bottom, margin.top]);
+  const SpaceScale = scaleLinear([10, -10], [width - margin.right, margin.left])
+  const TimeScale = scaleLinear([-10, 10],[height - margin.bottom, margin.top])
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -94,25 +91,6 @@ export const Grid = ({
     }
   };
 
-  const lorentz_factor = 1 / Math.sqrt(1 - Math.pow(velocity, 2));
-
-  const transform = (event) => {
-    const tempEvent = { ...event };
-    tempEvent.x = lorentz_factor * (event.x - velocity * event.t);
-    tempEvent.t = lorentz_factor * (event.t - velocity * event.x);
-    return tempEvent;
-  };
-
-  const transformedEvents = items.events.map((event: EventNode) => {
-    return transform(event);
-  });
-  const transformedWorldlines = items.worldlines.map((worldline: WorldLine) => {
-    return {
-      source: transform(worldline.source),
-      target: transform(worldline.target),
-    };
-  });
-
   return (
     <svg
       width={width}
@@ -141,7 +119,7 @@ export const Grid = ({
         TimeScale={TimeScale}
       />
       <Transformed
-        transformedItems={{events: transformedEvents, worldlines: transformedWorldlines}}
+        transformedItems={transformedItems}
         velocity={velocity}
         SpaceScale={SpaceScale}
         TimeScale={TimeScale}

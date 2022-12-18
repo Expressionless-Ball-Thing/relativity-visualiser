@@ -106,10 +106,12 @@ const App = () => {
         setVelocity={setVelocity}
         velocity={velocity}
         recenter={recenter}
+        setItems={setItems}
       />
       <Grid
         deleteStuff={deleteStuff}
         items={items}
+        transformedItems={{events: transformedEvents, worldlines: transformedWorldlines}}
         clicked={clicked}
         setClicked={setClicked}
         setItems={setItems}

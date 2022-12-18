@@ -1,4 +1,4 @@
-import { Slider, TextField } from "@mui/material";
+import { Slider } from "@mui/material";
 import { WorldLine } from "../App";
 
 type interval = "Timelike" | "Spacelike" | "Lightlike"
@@ -19,7 +19,7 @@ const determineIntervalType = (worldLine: WorldLine): interval => {
 
 }
 
-export const ToolBar = ({ clicked, updateEvent, deleteStuff, setVelocity, velocity, recenter }) => {
+export const ToolBar = ({ clicked, updateEvent, deleteStuff, setVelocity, velocity, recenter, setItems }) => {
 
   const intervalType = clicked.worldline === null ? null : determineIntervalType(clicked.worldline);
 
@@ -64,6 +64,9 @@ export const ToolBar = ({ clicked, updateEvent, deleteStuff, setVelocity, veloci
       </div>
       <div>
         <button className="delete" name="recenter" onClick={recenter}>Recenter</button>
+      </div>
+      <div>
+        <button className="delete" name="clear" onClick={() =>{ setItems({events:[], worldlines: []}); setVelocity(0)}}>Clear Grid</button>
       </div>
       <div className="VelocityBar">
         <Slider

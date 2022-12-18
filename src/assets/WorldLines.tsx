@@ -13,7 +13,7 @@ const WorldLines = ({
 
   useEffect(() => draw(), [items, clicked.worldline, mode]);
 
-  const mouseoverWorldLine = (event, worldline) => {
+  const mouseoverWorldLine = (event, worldline: WorldLine) => {
     if (mode === "idle") {
       event.stopPropagation();
       event.target.style.stroke = "red";
@@ -21,27 +21,34 @@ const WorldLines = ({
       document.body.style.cursor = "pointer";
 
       d3.selectAll(".transformed_stuff path")
-        .filter((d) => (d.source.id === worldline.source.id && d.target.id === worldline.target.id))
+        .filter(
+          (d) =>
+            d.source.id === worldline.source.id &&
+            d.target.id === worldline.target.id
+        )
         .transition()
-        .style("stroke", "black")
+        .style("stroke", "black");
     }
   };
 
-  const mouseleaveWorldLine = (event, worldline) => {
+  const mouseleaveWorldLine = (event, worldline: WorldLine) => {
     if (mode === "idle") {
       event.stopPropagation();
       event.target.style = "";
       document.body.style.cursor = "";
 
       d3.selectAll(".transformed_stuff path")
-        .filter((d) => (d.source.id === worldline.source.id && d.target.id === worldline.target.id))
+        .filter(
+          (d) =>
+            d.source.id === worldline.source.id &&
+            d.target.id === worldline.target.id
+        )
         .transition()
-        .style("stroke", "turquoise")
-
+        .style("stroke", "turquoise");
     }
   };
-  const mousedownWorldLine = (worldline) => {
-    setClicked({worldline: worldline, event: null})
+  const mousedownWorldLine = (worldline: WorldLine) => {
+    setClicked({ worldline: worldline, event: null });
   };
 
   const lines = items.worldlines.map((worldline: WorldLine) => (
@@ -58,8 +65,12 @@ const WorldLines = ({
       .data(items.worldlines)
       .classed("worldline", true)
       .classed("selected", (worldline) => worldline === clicked.worldline)
-      .on("mouseover", (event, worldline) => mouseoverWorldLine(event, worldline))
-      .on("mouseleave", (event, worldline) => mouseleaveWorldLine(event, worldline))
+      .on("mouseover", (event, worldline) =>
+        mouseoverWorldLine(event, worldline)
+      )
+      .on("mouseleave", (event, worldline) =>
+        mouseleaveWorldLine(event, worldline)
+      )
       .on("mousedown", (_, worldline) => mousedownWorldLine(worldline))
       .transition()
       .duration(500)

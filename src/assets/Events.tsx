@@ -16,7 +16,6 @@ const Events = ({
   setMode,
   setItems
 }) => {
-
   const svgRef = useRef(null)
   useEffect(() => draw(), [items, clicked.event, mode])
 
@@ -103,5 +102,4 @@ const Events = ({
   );
 };
 
-//{tooltip && <Tooltip eventdata={tooltip} />}
 export default Events;

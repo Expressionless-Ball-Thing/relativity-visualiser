@@ -47,7 +47,6 @@
 
 .worldline.selected {
   stroke: red;
-  stroke-dasharray: 10,2;
 }
 
 .tooltip {

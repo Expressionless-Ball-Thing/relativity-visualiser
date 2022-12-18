@@ -1,38 +1,48 @@
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
 
-const Transformed = ({
-  transformedItems,
-  velocity,
-  SpaceScale,
-  TimeScale,
-}) => {
+const Transformed = ({ transformedItems, velocity, SpaceScale, TimeScale }) => {
   const svgRef = useRef(null);
-  useEffect(() => draw(), [transformedItems, velocity])
-
+  useEffect(() => draw(), [transformedItems, velocity]);
 
   const event_array = transformedItems.events.map((event) => (
-    <circle id={(Math.pow(2, event.id)).toString() + " transformed"} key={(Math.pow(2, event.id)).toString() + " transformed"} />
+    <circle key={Math.pow(2, event.id).toString() + " transformed"} />
   ));
   const worldline_array = transformedItems.worldlines.map((worldline) => (
-    <path id={(Math.pow(2, worldline.source.id) * Math.pow(3, worldline.target.id)).toString() + " transformed"} key={(Math.pow(2, worldline.source.id) * Math.pow(3, worldline.target.id)).toString() + " transformed"} />
+    <path
+      id={
+        (
+          Math.pow(2, worldline.source.id) * Math.pow(3, worldline.target.id)
+        ).toString() + " transformed"
+      }
+      key={
+        (
+          Math.pow(2, worldline.source.id) * Math.pow(3, worldline.target.id)
+        ).toString() + " transformed"
+      }
+    />
   ));
 
   const draw = () => {
-    d3.select(svgRef.current)
+    let nodes = d3
+      .select(svgRef.current)
       .selectAll("circle")
       .data(transformedItems.events)
-      .classed("node", true)
+
+    let paths = d3
+      .select(svgRef.current)
+      .selectAll("path")
+      .data(transformedItems.worldlines);
+
+    nodes
       .transition()
       .duration(500)
-      .attr("cx", (d) => SpaceScale(d.x))
-      .attr("cy", (d) => TimeScale(d.t))
+      .attr("cx", (event) => SpaceScale(event.x))
+      .attr("cy", (event) => TimeScale(event.t))
       .attr("r", 5)
-      .attr("fill", "#cbd1d8");
+      .style("fill", "#cbd1d8");
 
-    d3.select(svgRef.current)
-      .selectAll("path")
-      .data(transformedItems.worldlines)
+    paths
       .transition()
       .duration(500)
       .attr(
@@ -45,17 +55,18 @@ const Transformed = ({
   };
 
   return (
-  <>
-  {([-1, 1].includes(velocity))? "": <g className="transformed_stuff" ref={svgRef}>
-    <g>
-        {worldline_array}
-    </g>
-    <g>
-        {event_array}
-    </g>
-  </g>};
-  </>
-  )
+    <>
+      {[-1, 1].includes(velocity) ? (
+        ""
+      ) : (
+        <g className="transformed_stuff" ref={svgRef}>
+          <g>{worldline_array}</g>
+          <g>{event_array}</g>
+        </g>
+      )}
+      ;
+    </>
+  );
 };
 
 export default Transformed;
