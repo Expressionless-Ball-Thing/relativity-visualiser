@@ -1,4 +1,13 @@
-import { Slider } from "@mui/material";
+import {
+  Button,
+  ButtonGroup,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Slider,
+  TextField,
+  useMediaQuery,
+} from "@mui/material";
 import { WorldLine } from "../App";
 
 type interval = "Timelike" | "Spacelike" | "Lightlike";
@@ -28,16 +37,21 @@ export const ToolBar = ({
   recenter,
   setItems,
 }) => {
+  const matches = useMediaQuery("(min-width:300px)");
   const determineNewVelocity = (clicked) => {
-
     let interval: WorldLine;
 
     if (clicked.event === null && clicked.worldline === null) {
-      alert("Nothing is selected"); return;
+      alert("Nothing is selected");
+      return;
     } else if (clicked.event !== null) {
-      interval = {name: "", source: {id: 0, name: "", x: 0, t: 0}, target: clicked.event};
+      interval = {
+        name: "",
+        source: { id: 0, name: "", x: 0, t: 0 },
+        target: clicked.event,
+      };
     } else {
-      interval = clicked.worldline
+      interval = clicked.worldline;
     }
 
     const intervalType = determineIntervalType(interval);
@@ -59,77 +73,82 @@ export const ToolBar = ({
 
   return (
     <div className="ToolBar">
-      <div className="Typebar">
-        <span className="control_label type">Type:</span>
-        <span className="label_type">
-          {clicked.event !== null
-            ? "Event"
-            : clicked.worldline !== null
-            ? `${determineIntervalType(clicked.worldline)} interval`
-            : "N/A"}
-        </span>
-      </div>
       <div className="Namebar">
-        <div className="control_label input_label">
-          {clicked.event !== null ? "Event" : "Interval"} name:
+        <div>
+          <div className="control_label">Type:</div>
+          <span className="label_type">
+            {clicked.event !== null
+              ? "Event"
+              : clicked.worldline !== null
+              ? `${determineIntervalType(clicked.worldline)} interval`
+              : "N/A"}
+          </span>
         </div>
-        <input
-          type="text"
-          value={clicked.event !== null ? clicked.event.name : clicked.worldline !== null ? clicked.worldline.name : ""}
-          onChange={updateEvent}
-          disabled={clicked.event === null && clicked.worldline === null ? true : false}
-        />
-      </div>
-      <div className="ButtonBar">
-        <button className="delete" name="delete" onClick={deleteStuff}>
+        <div>
+          <div className="control_label">{`Name: `}</div>
+          <input
+            type="text"
+            value={clicked.event !== null ? clicked.event.name : clicked.worldline !== null ? clicked.worldline.name : ""}
+            onChange={updateEvent}
+            disabled={clicked.event === null && clicked.worldline === null ? true : false}
+          />            
+          <Button variant="outlined" onClick={deleteStuff} size="small">
           delete
-        </button>
-        <button
-          className="transform"
-          name="transform"
-          onClick={() => determineNewVelocity(clicked)}
-        >
-          Transform
-        </button>
-        <button className="recenter" name="recenter" onClick={recenter}>
-          Recenter
-        </button>
-        <button
-          className="clear"
-          name="clear"
-          onClick={() => {
-            setItems({ events: [], worldlines: [] });
-            setVelocity(0);
-          }}
-        >
-          Clear Grid
-        </button>
+        </Button>
+        </div>
+
       </div>
-      <div className="Addbar">
-        <span className="control_label move_event">Move Event:</span>
-        <input type="checkbox" name="add" />
+      <div className="UtilityBar">
+        <div>
+          <ButtonGroup
+            variant="outlined"
+            aria-label="outlined button group"
+            size="small"
+            orientation={`${matches ? `horizontal` : `vertical`}`}
+          >
+            <Button
+              className="transform"
+              onClick={() => determineNewVelocity(clicked)}
+            >
+              Transform
+            </Button>
+            <Button className="recenter" onClick={recenter}>
+              Recenter
+            </Button>
+            <Button
+              className="clear"
+              onClick={() => {
+                setItems({ events: [], worldlines: [] });
+                setVelocity(0);
+              }}
+            >
+              Clear Grid
+            </Button>
+          </ButtonGroup>
+        </div>
       </div>
-      <div className="VelocityBar">
-        <Slider
-          size="small"
-          defaultValue={0}
-          aria-label="Small"
-          valueLabelDisplay="auto"
-          min={-1}
-          max={1}
-          step={0.01}
-          value={velocity}
-          onChange={(_, newValue) => setVelocity(newValue)}
-        />
-        <input
-          type="number"
-          min="-1"
-          max="1"
-          id="Eventname"
-          value={velocity}
-          onChange={(event) => setVelocity(event.target.value)}
-        />
-      </div>
+        <fieldset className="VelocityBar">
+          <legend>Velocity Settings</legend>
+          <Slider
+            size="small"
+            defaultValue={0}
+            aria-label="Small"
+            valueLabelDisplay="auto"
+            min={-1}
+            max={1}
+            step={0.01}
+            value={velocity}
+            onChange={(_, newValue) => setVelocity(newValue)}
+          />
+          <input
+            type="text"
+            min="-1"
+            max="1"
+            id="Eventname"
+            placeholder="Enter a number between -1 and 1"
+            onChange={(event) => { if (event.target.value < 1 && event.target.value > -1) {setVelocity(event.target.value)}}}
+          />
+        </fieldset>
     </div>
   );
 };

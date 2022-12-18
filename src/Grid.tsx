@@ -117,6 +117,7 @@ export const Grid = ({
     if (event.target.tagName === "INPUT") return;
     if (["Backspace", "Delete"].includes(event.key)) {
       deleteStuff();
+      settooltip({type: null, data: null, position: null})
     }
   };
 
