@@ -14,6 +14,7 @@
 
 .axis text {
   font: sans-serif;
+  user-select: none;
 }
 
 .axis-label {
@@ -22,9 +23,30 @@
   user-select: none;
 }
 
-.selected {
+.tick-label {
+  font-size: 0.7em;
+}
+
+.node.selected {
   stroke: black;
   stroke-width: 2;
+}
+
+.worldline {
+  stroke: black;
+  stroke-width: 2;
+}
+
+.transformed_stuff {
+  stroke: turquoise;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.worldline.selected {
+  stroke: red;
 }
 
 .tooltip {
@@ -38,10 +60,20 @@
 
 
 .ToolBar {
+  margin-top: 20px;
+  margin-bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
+}
+
+.VelocityBar {
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px;
+  width: 500px;
+  height: 25px;
 }
 
 .control_label {

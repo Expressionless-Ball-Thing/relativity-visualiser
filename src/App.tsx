@@ -10,38 +10,129 @@ export interface EventNode {
   t: number;
 }
 
-const App = () => {
-  const [clickedEvent, setClickedEvent] = useState<EventNode>({});
-  const [events, setEvents] = useState<EventNode[]>([
-    {id: 0, name: "You", x: 0, t: 0},
-    {id: 1, name: "event", x: 1, t: 1},
-    {id: 2, name: "another event", x: -1, t: 2}
-  ]);
+export interface WorldLine {
+  name: String;
+  source: EventNode;
+  target: EventNode;
+}
 
-  const deleteEvent = () => {
-    console.log("hey")
-    setEvents(events.filter((event: EventNode) => event.id !== clickedEvent.id));
+export interface Items {
+  events: EventNode[];
+  worldlines: WorldLine[];
+}
+
+export interface Clicked {
+  event: EventNode | null;
+  worldline: WorldLine | null;
+}
+
+type Mode = "idle" | "dragLine" | "dragEvent";
+
+const App = () => {
+  const [clicked, setClicked] = useState<Clicked>({
+    event: null,
+    worldline: null,
+  });
+  const [items, setItems] = useState<Items>({ events: [], worldlines: [] });
+  const [mode, setMode] = useState<Mode>("idle");
+  const [velocity, setVelocity] = useState<number>(0);
+
+  const deleteStuff = () => {
+    if (clicked.event !== null) {
+      setItems({
+        events: items.events.filter(
+          (event: EventNode) => (event.id !== clicked.event.id)
+        ),
+        worldlines: items.worldlines.filter(
+          (worldline: WorldLine) =>
+            (worldline.source.id !== clicked.event.id &&
+            worldline.target.id !== clicked.event.id)
+        )
+      });
+    } else {
+      setItems({
+        ...items,
+        worldlines: items.worldlines.filter((worldline: WorldLine) => {
+          return !(
+            (worldline.source.id === clicked.worldline.source.id &&
+              worldline.target.id === clicked.worldline.target.id) ||
+            (worldline.source.id === clicked.worldline.target.id &&
+              worldline.target.id === clicked.worldline.source.id)
+          );
+        }),
+      });
+    }
   };
 
   const updateEventName = (event: Event) => {
-    let tempEvents = [...events]
-    for (let i : number = 0; i < events.length; i++) {
-      if (tempEvents[i].id === clickedEvent.id) {
-        tempEvents[i].name = event.target.value;
-        break;
+    if (clicked.event !== null) {
+      let tempEvents = [...items.events];
+      for (let i: number = 0; i < tempEvents.length; i++) {
+        if (tempEvents[i].id === clicked.event.id) {
+          tempEvents[i].name = event.target.value;
+          setItems({...items, events: tempEvents})
+          return;
+        }
+      }
+    } else if (clicked.worldline !== null) {
+      let tempWorldlines = [...items.worldlines];
+      for (let i: number = 0; i < tempWorldlines.length; i++) {
+        if (tempWorldlines[i].source === clicked.worldline.source && tempWorldlines[i].target === clicked.worldline.target) {
+          tempWorldlines[i].name = event.target.value;
+          setItems({...items, worldlines: tempWorldlines})
+          return;
+        }
       }
     }
-    setEvents(tempEvents);
-  }
+
+    ;
+  };
+  const lorentz_factor = 1 / Math.sqrt(1 - Math.pow(velocity, 2));
+  const transform = (event) => {
+    const tempEvent = { ...event };
+    tempEvent.x = lorentz_factor * (event.x - velocity * event.t);
+    tempEvent.t = lorentz_factor * (event.t - velocity * event.x);
+    return tempEvent;
+  };
+
+  const transformedEvents = items.events.map((event) => {
+    return transform(event);
+  });
+  const transformedWorldlines = items.worldlines.map((worldline) => {
+    return {
+      source: transform(worldline.source),
+      target: transform(worldline.target),
+    };
+  });
+
+  const recenter = () => {
+    setItems({ events: transformedEvents, worldlines: transformedWorldlines });
+    setClicked({ event: null, worldline: null });
+    setVelocity(0);
+  };
 
   return (
     <div className="App">
-      <ToolBar clickedEvent={clickedEvent} deleteEvent={deleteEvent} updateEvent={updateEventName}/>
+      <ToolBar
+        clicked={clicked}
+        deleteStuff={deleteStuff}
+        updateEvent={updateEventName}
+        setVelocity={setVelocity}
+        velocity={velocity}
+        recenter={recenter}
+        setItems={setItems}
+      />
       <Grid
-        events={events}
-        clickedEvent={clickedEvent}
-        setClickedEvent={setClickedEvent}
-        setEvents={setEvents}/>
+        deleteStuff={deleteStuff}
+        items={items}
+        transformedItems={{events: transformedEvents, worldlines: transformedWorldlines}}
+        clicked={clicked}
+        setClicked={setClicked}
+        setItems={setItems}
+        mode={mode}
+        setMode={setMode}
+        velocity={velocity}
+      />
     </div>
   );
 };
