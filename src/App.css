@@ -1,4 +1,5 @@
 .App {
+  display: block;
   text-align: center;
   font-family: "Roboto","Helvetica","Arial",sans-serif;
 }
@@ -10,9 +11,8 @@ input[type="text"] {
 }
 
 .Grid {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: block;
+  margin: auto 20px;
 }
 
 .axis line {
@@ -26,7 +26,7 @@ input[type="text"] {
 }
 
 .axis-label {
-  font-size: 1.1em;
+  font-size: 0.8125rem;
   fill: #635F5D;
   user-select: none;
 }

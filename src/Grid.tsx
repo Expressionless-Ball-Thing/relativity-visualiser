@@ -16,8 +16,8 @@ export interface Margin {
   left: number;
 }
 
-const width: number = 1000;
-const height: number = 1000;
+const width: number = 800;
+const height: number = 800;
 const margin = { top: 0, right: 0, bottom: 0, left: 0 };
 const SpaceScale = d3.scaleLinear([10, -10], [width - margin.right, margin.left])
 const TimeScale = d3.scaleLinear([-10, 10],[height - margin.bottom, margin.top])
