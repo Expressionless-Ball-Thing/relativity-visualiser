@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
 
-const Transformed = ({ transformedItems, velocity, SpaceScale, TimeScale }) => {
+const Transformed = ({ transformedItems, velocity, SpaceScale, TimeScale, setTooltip }) => {
   const svgRef = useRef(null);
   useEffect(() => draw(), [transformedItems, velocity]);
 
@@ -28,11 +28,15 @@ const Transformed = ({ transformedItems, velocity, SpaceScale, TimeScale }) => {
       .select(svgRef.current)
       .selectAll("circle")
       .data(transformedItems.events)
+      .on("mouseover", (event, component) => setTooltip({type: "event", data: component, position: d3.pointer(event)}))
+      .on("mouseleave", () => setTooltip({type: null, data: null, position: null}))
 
     let paths = d3
       .select(svgRef.current)
       .selectAll("path")
-      .data(transformedItems.worldlines);
+      .data(transformedItems.worldlines)
+      .on("mouseover", (event, component) => setTooltip({type: "worldline", data: component, position: d3.pointer(event)}))
+      .on("mouseleave", () => setTooltip({type: null, data: null, position: null}));;
 
     nodes
       .transition()
@@ -40,7 +44,7 @@ const Transformed = ({ transformedItems, velocity, SpaceScale, TimeScale }) => {
       .attr("cx", (event) => SpaceScale(event.x))
       .attr("cy", (event) => TimeScale(event.t))
       .attr("r", 5)
-      .style("fill", "#cbd1d8");
+      .style("fill", "#cbd1d8")
 
     paths
       .transition()

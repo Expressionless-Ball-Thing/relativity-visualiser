@@ -34,9 +34,9 @@ const Tooltip = ({tooltipdata}) => {
     {tooltipdata.type === "event" ? <>
       <strong>{tooltipdata.data.name}</strong>
       <br/>
-      x: {tooltipdata.data.x}
+      x: {Math.round(tooltipdata.data.x * 1000) / 1000}
       <br/>
-      t: {tooltipdata.data.t}
+      t: {Math.round(tooltipdata.data.t * 1000) / 1000}
       </>
     
     : 
@@ -153,6 +153,7 @@ export const Grid = ({
         velocity={velocity}
         SpaceScale={SpaceScale}
         TimeScale={TimeScale}
+        setTooltip={settooltip}
       />
       <WorldLines
         items={items}
