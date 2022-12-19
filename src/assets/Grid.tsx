@@ -1,13 +1,12 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
-import { EventNode, WorldLine } from "./App";
-import DragLine from "./assets/DragLine";
-import Events from "./assets/Events";
-import { SpaceAxis } from "./assets/SpaceAxis";
-import { TimeAxis } from "./assets/TimeAxis";
-import { determineIntervalType } from "./assets/Toolbar";
-import Transformed from "./assets/Transformed";
-import WorldLines from "./assets/WorldLines";
+import { EventNode, WorldLine } from "../App";
+import DragLine from "./DragLine";
+import Events from "./Events";
+import { SpaceAxis } from "./SpaceAxis";
+import { TimeAxis } from "./TimeAxis";
+import Transformed from "./Transformed";
+import WorldLines from "./WorldLines";
 
 export interface Margin {
   top: number;

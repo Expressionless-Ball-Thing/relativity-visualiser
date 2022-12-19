@@ -1,7 +1,8 @@
 import "./App.css";
 import { useState } from "react";
 import { ToolBar } from "./assets/Toolbar";
-import { Grid } from "./Grid";
+import { Grid } from "./assets/Grid";
+import NavBar from "./assets/NavBar/NavBar";
 
 export interface EventNode {
   id: number;
@@ -88,7 +89,7 @@ const App = () => {
     ;
   };
   const lorentz_factor = 1 / Math.sqrt(1 - Math.pow(velocity, 2));
-  const transform = (event) => {
+  const transform = (event: EventNode): EventNode => {
     const tempEvent = { ...event };
     tempEvent.x = lorentz_factor * (event.x - velocity * event.t);
     tempEvent.t = lorentz_factor * (event.t - velocity * event.x);
@@ -102,6 +103,7 @@ const App = () => {
     return {
       source: transform(worldline.source),
       target: transform(worldline.target),
+      name: worldline.name
     };
   });
 
@@ -113,7 +115,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <div className="heading"><h1>Lorentz Transform Visualiser</h1></div>
+      <NavBar />
       <ToolBar
         clicked={clicked}
         deleteStuff={deleteStuff}

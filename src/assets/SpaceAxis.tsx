@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { ScaleLinear } from "d3";
-import { Margin } from "../Grid";
+import { Margin } from "./Grid";
 
 export const SpaceAxis = ({ height, width, margin, SpaceScale}: {height: number, width: number, margin: Margin, SpaceScale: ScaleLinear<Number, Number, never>}) => {
   return (
