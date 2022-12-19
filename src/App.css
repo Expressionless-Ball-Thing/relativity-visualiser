@@ -57,6 +57,7 @@ input[type="text"] {
 }
 
 .tooltip {
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
   border: 1px solid black;
   opacity: 1;
   background: white;

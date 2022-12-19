@@ -1,6 +1,8 @@
 import { WorldLine } from "../App";
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
+import { Tooltip } from "@mui/material";
+import { determineIntervalType } from "./Toolbar";
 const WorldLines = ({
   items,
   SpaceScale,
@@ -8,7 +10,6 @@ const WorldLines = ({
   setClicked,
   clicked,
   mode,
-  setTooltip,
   velocity
 }) => {
   const svgRef = useRef(null);
@@ -17,10 +18,9 @@ const WorldLines = ({
 
   const mouseoverWorldLine = (event, worldline: WorldLine) => {
     if (mode === "idle") {
-      event.stopPropagation();
       event.target.style.stroke = "red";
       event.target.style.strokeWidth = 5;
-      document.body.style.cursor = "pointer";
+      event.target.style.cursor = "pointer";
 
       d3.selectAll(".transformed_stuff path")
         .filter(
@@ -30,8 +30,6 @@ const WorldLines = ({
         )
         .transition()
         .style("stroke", "black");
-      
-      setTooltip({type: "worldline", data: worldline, position: d3.pointer(event)})
     }
   };
 
@@ -49,19 +47,34 @@ const WorldLines = ({
         )
         .transition()
         .style("stroke", "turquoise");
-      setTooltip({type: null, data: null, position: null})
     }
   };
   const mousedownWorldLine = (worldline: WorldLine) => {
     setClicked({ worldline: worldline, event: null });
   };
 
-  const lines = items.worldlines.map((worldline: WorldLine) => (
+  const lines = items.worldlines.map((d: WorldLine) => (
+    <Tooltip followCursor
+      title={
+        <>
+          {d.name !== "" ? <><strong>{d.name}</strong>
+          <br/></> : ""}
+          {`Interval Type: ${determineIntervalType(d)}`}
+        </>
+      }
+      key={
+        (
+          Math.pow(2, d.source.id) * Math.pow(3, d.target.id)
+        ).toString()
+      }
+      >
     <path
       key={(
-        Math.pow(2, worldline.source.id) * Math.pow(3, worldline.target.id)
+        Math.pow(2, d.source.id) * Math.pow(3, d.target.id)
       ).toString()}
     />
+    </Tooltip>
+
   ));
 
   const draw = () => {
