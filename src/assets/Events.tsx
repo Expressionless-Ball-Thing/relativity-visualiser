@@ -15,10 +15,11 @@ const Events = ({
   mode,
   setMode,
   setItems,
-  setTooltip
+  setTooltip,
+  velocity
 }) => {
   const svgRef = useRef(null)
-  useEffect(() => draw(), [items, clicked.event, mode])
+  useEffect(() => draw(), [items, clicked, mode, velocity])
 
   const mouseoverEvent = (event, component) => {
     event.stopPropagation();

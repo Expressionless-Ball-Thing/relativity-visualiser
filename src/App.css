@@ -6,7 +6,6 @@
 
 input[type="text"] {
   height: 24px;
-  margin: auto;
   font-family: "Roboto","Helvetica","Arial",sans-serif;
 }
 
@@ -102,7 +101,7 @@ input[type="text"] {
 }
 
 .VelocityBar input {
-  width: 100%;
+  width: 90%;
   text-align: center;
 }
 
