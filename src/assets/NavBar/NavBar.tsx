@@ -26,16 +26,16 @@ const NavBar = () => {
       <NavbarBox>
       <StyledNavBar>
         <Toolbar>
-          <CustomModal title={'Instructions'} showIcon={<QuestionMarkIcon />} description={'How to use this thing'} content={<Instructions />} />
           <Title variant="h5">
             Lorentz Transform Visualiser
           </Title>
+          <CustomModal title={'Instructions'} showIcon={<QuestionMarkIcon />} description={'How to use this thing'} content={<Instructions />} />
           <Tooltip title="link to Github repo">
-            <IconButton aria-label="link to Github repo">
-              <a href="https://github.com/Expressionless-Ball-Thing/relativity-visualiser">
-              <GitHubIcon color="action"/>
-              </a>
-            </IconButton>
+            <Link href="https://github.com/Expressionless-Ball-Thing/relativity-visualiser">
+              <IconButton aria-label="link to Github repo">
+                <GitHubIcon color="inherit"/>
+              </IconButton>
+            </Link>
           </Tooltip>
         </Toolbar>
       </StyledNavBar>

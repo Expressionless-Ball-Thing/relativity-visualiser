@@ -2,6 +2,7 @@ import { Tooltip } from "@mui/material";
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
 import { EventNode } from "../App";
+import { determineIntervalType } from "./Toolbar";
 
 const colorScale = d3.schemePaired;
 
@@ -50,7 +51,7 @@ const Events = ({
   };
 
   const mousedownEvent = (event) => {
-    setClicked({ worldline: null, event: event });
+    setClicked({worldline: null, event: event });
     if (mode === "idle") {
       setMode("dragLine");
     }
@@ -59,6 +60,7 @@ const Events = ({
   const mouseupEvent = (event: EventNode) => {
     const tempWorldlines = [...items.worldlines];
     const newline: object = {
+      name: "",
       source: clicked.event,
       target: event,
     };
@@ -85,6 +87,8 @@ const Events = ({
           X: {Math.round(d.x * 1000) / 1000}
           <br/>
           T: {Math.round(d.t * 1000) / 1000}
+          <br/>
+          {determineIntervalType({name: "", source: { id: 0, name: "", x: 0, t: 0 }, target: d})}
         </>
       }
       key={Math.pow(2, d.id).toString()}

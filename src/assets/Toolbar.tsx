@@ -75,10 +75,10 @@ export const ToolBar = ({
     <div className="ToolBar">
       <div className="Namebar">
         <div>
-          <div className="control_label">Type:</div>
+          <div className="control_label">{`Type: `}</div>
           <span className="label_type">
             {clicked.event !== null
-              ? "Event"
+              ? `Event (${determineIntervalType({name: "", source: { id: 0, name: "", x: 0, t: 0 }, target: clicked.event})})`
               : clicked.worldline !== null
               ? `${determineIntervalType(clicked.worldline)} interval`
               : "N/A"}
@@ -137,7 +137,7 @@ export const ToolBar = ({
             min={-1}
             max={1}
             step={0.01}
-            value={velocity}
+            value={parseFloat(velocity)}
             onChange={(_, newValue) => setVelocity(newValue)}
           />
           <input
