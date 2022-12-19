@@ -1,13 +1,12 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
-import { EventNode, WorldLine } from "./App";
-import DragLine from "./assets/DragLine";
-import Events from "./assets/Events";
-import { SpaceAxis } from "./assets/SpaceAxis";
-import { TimeAxis } from "./assets/TimeAxis";
-import { determineIntervalType } from "./assets/Toolbar";
-import Transformed from "./assets/Transformed";
-import WorldLines from "./assets/WorldLines";
+import { EventNode, WorldLine } from "../App";
+import DragLine from "./DragLine";
+import Events from "./Events";
+import { SpaceAxis } from "./SpaceAxis";
+import { TimeAxis } from "./TimeAxis";
+import Transformed from "./Transformed";
+import WorldLines from "./WorldLines";
 
 export interface Margin {
   top: number;
@@ -19,37 +18,6 @@ export interface Margin {
 const width: number = 900;
 const height: number = 900;
 const margin = { top: 0, right: 0, bottom: 0, left: 0 };
-
-interface Tooltip {
-  type: "event" | "worldline" | null;
-  data: EventNode | WorldLine | null;
-  position: number[] | null;
-}
-
-const Tooltip = ({ tooltipdata }) => {
-  return (
-    <foreignObject
-      x={tooltipdata.position[0] + 10}
-      y={tooltipdata.position[1] + 10}
-      width={100}
-      height={100}
-    >
-      <div className="tooltip">
-        <strong>{tooltipdata.data.name}</strong>
-        <hr />
-        {tooltipdata.type === "event" ? (
-          <>
-            x: {Math.round(tooltipdata.data.x * 1000) / 1000}
-            <hr />
-            t: {Math.round(tooltipdata.data.t * 1000) / 1000}
-          </>
-        ) : (
-          `Interval Type: ${determineIntervalType(tooltipdata.data)}`
-        )}
-      </div>
-    </foreignObject>
-  );
-};
 
 export const Grid = ({
   items,
@@ -92,12 +60,6 @@ export const Grid = ({
     [-bound, bound],
     [height - margin.bottom, margin.top]
   );
-
-  const [tooltip, settooltip] = useState<Tooltip>({
-    type: null,
-    data: null,
-    position: null,
-  });
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -154,7 +116,6 @@ export const Grid = ({
     if (event.target.tagName === "INPUT") return;
     if (["Backspace", "Delete"].includes(event.key)) {
       deleteStuff();
-      settooltip({ type: null, data: null, position: null });
     }
   };
 
@@ -191,7 +152,6 @@ export const Grid = ({
           velocity={velocity}
           SpaceScale={SpaceScale}
           TimeScale={TimeScale}
-          setTooltip={settooltip}
         />
         <WorldLines
           items={items}
@@ -201,7 +161,6 @@ export const Grid = ({
           setClicked={setClicked}
           mode={mode}
           clicked={clicked}
-          setTooltip={settooltip}
         />
         <Events
           items={items}
@@ -213,9 +172,7 @@ export const Grid = ({
           mode={mode}
           setMode={setMode}
           setItems={setItems}
-          setTooltip={settooltip}
         />
-        {tooltip.type === null ? "" : <Tooltip tooltipdata={tooltip} />}
       </svg>
     </>
   );

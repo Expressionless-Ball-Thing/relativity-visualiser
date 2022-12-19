@@ -146,6 +146,7 @@ export const ToolBar = ({
             max="1"
             id="Eventname"
             placeholder="Enter a number between -1 and 1"
+            value={velocity}
             onChange={(event) => { if (event.target.value < 1 && event.target.value > -1) {setVelocity(event.target.value)}}}
           />
         </fieldset>

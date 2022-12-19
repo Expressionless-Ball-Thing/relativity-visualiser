@@ -1,5 +1,5 @@
 import { ScaleLinear } from "d3";
-import { Margin } from "../Grid";
+import { Margin } from "./Grid";
 
 export const TimeAxis = ({ height, width, margin, TimeScale} : {height: number, width: number, margin: Margin, TimeScale: ScaleLinear<Number, Number, never>}) => {
   return (

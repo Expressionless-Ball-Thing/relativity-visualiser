@@ -1,26 +1,57 @@
+import { Tooltip } from "@mui/material";
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
+import { EventNode, WorldLine } from "../App";
+import { determineIntervalType } from "./Toolbar";
 
-const Transformed = ({ transformedItems, velocity, SpaceScale, TimeScale, setTooltip }) => {
+const Transformed = ({ transformedItems, velocity, SpaceScale, TimeScale}) => {
   const svgRef = useRef(null);
   useEffect(() => draw(), [transformedItems, velocity]);
 
-  const event_array = transformedItems.events.map((event) => (
-    <circle key={Math.pow(2, event.id).toString() + " transformed"} />
+  const event_array = transformedItems.events.map((d: EventNode) => (
+    <Tooltip followCursor
+      title={
+        <>
+          {d.name !== "" ? <><strong>{d.name}</strong>
+          <br/></> : ""}
+          X: {Math.round(d.x * 1000) / 1000}
+          <br/>
+          T: {Math.round(d.t * 1000) / 1000}
+        </>
+      }
+      key={Math.pow(2, d.id).toString()  + " transformed"}
+      >
+    <circle key={Math.pow(2, d.id).toString() + " transformed"} />
+    </Tooltip>
   ));
-  const worldline_array = transformedItems.worldlines.map((worldline) => (
+  const worldline_array = transformedItems.worldlines.map((d: WorldLine) => (
+    <Tooltip followCursor
+      title={
+        <>
+          {d.name !== "" ? <><strong>{d.name}</strong>
+          <br/></> : ""}
+          {`Interval Type: ${determineIntervalType(d)}`}
+        </>
+      }
+      key={
+        (
+          Math.pow(2, d.source.id) * Math.pow(3, d.target.id)
+        ).toString() + " transformed"
+      }
+      >
     <path
       id={
         (
-          Math.pow(2, worldline.source.id) * Math.pow(3, worldline.target.id)
+          Math.pow(2, d.source.id) * Math.pow(3, d.target.id)
         ).toString() + " transformed"
       }
       key={
         (
-          Math.pow(2, worldline.source.id) * Math.pow(3, worldline.target.id)
+          Math.pow(2, d.source.id) * Math.pow(3, d.target.id)
         ).toString() + " transformed"
       }
     />
+    </Tooltip>
   ));
 
   const draw = () => {
@@ -28,15 +59,11 @@ const Transformed = ({ transformedItems, velocity, SpaceScale, TimeScale, setToo
       .select(svgRef.current)
       .selectAll("circle")
       .data(transformedItems.events)
-      .on("mouseover", (event, component) => setTooltip({type: "event", data: component, position: d3.pointer(event)}))
-      .on("mouseleave", () => setTooltip({type: null, data: null, position: null}))
 
     let paths = d3
       .select(svgRef.current)
       .selectAll("path")
       .data(transformedItems.worldlines)
-      .on("mouseover", (event, component) => setTooltip({type: "worldline", data: component, position: d3.pointer(event)}))
-      .on("mouseleave", () => setTooltip({type: null, data: null, position: null}));;
 
     nodes
       .transition()
