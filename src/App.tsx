@@ -113,6 +113,7 @@ const App = () => {
 
   return (
     <div className="App">
+      <div className="heading"><h1>Lorentz Transform Visualiser</h1></div>
       <ToolBar
         clicked={clicked}
         deleteStuff={deleteStuff}
@@ -122,6 +123,7 @@ const App = () => {
         recenter={recenter}
         setItems={setItems}
       />
+      <div className="Grid">
       <Grid
         deleteStuff={deleteStuff}
         items={items}
@@ -133,6 +135,7 @@ const App = () => {
         setMode={setMode}
         velocity={velocity}
       />
+      </div>
     </div>
   );
 };

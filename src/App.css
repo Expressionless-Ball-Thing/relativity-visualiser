@@ -1,10 +1,17 @@
 .App {
+  display: block;
   text-align: center;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
 }
 
+input[type="text"] {
+  height: 24px;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+}
 
-.visualiser {
-  border: 1px solid black;
+.Grid {
+  display: block;
+  margin: auto 20px;
 }
 
 .axis line {
@@ -18,7 +25,7 @@
 }
 
 .axis-label {
-  font-size: 1.1em;
+  font-size: 0.8125rem;
   fill: #635F5D;
   user-select: none;
 }
@@ -61,31 +68,58 @@
 
 .ToolBar {
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: row;
+  flex-direction: column;
+}
+
+.Namebar {
+  display: flex;
+  column-gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 6px;
+}
+
+.UtilityBar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .VelocityBar {
-  display: flex;
-  flex-direction: column;
-  margin: 0 20px;
-  width: 500px;
-  height: 25px;
+  margin: 10px 0;
+  width: 30%;
+  border-radius: 5px;
+}
+
+.VelocityBar legend {
+  font-size: small;
+}
+
+.VelocityBar input {
+  width: 90%;
+  text-align: center;
+}
+
+.VelocityBar fieldset {
+  margin: 0 0;
 }
 
 .control_label {
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: blue;
-  margin: auto;
+  margin: 0 5px;
   display: inline-block;
 }
 
 .label_type {
-  display: inline-block;
+  margin: auto auto;
   width: 60px;
+  font-size: 0.8125rem;
 }
 
 

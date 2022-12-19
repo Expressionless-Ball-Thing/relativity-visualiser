@@ -8,11 +8,12 @@ const WorldLines = ({
   setClicked,
   clicked,
   mode,
-  setTooltip
+  setTooltip,
+  velocity
 }) => {
   const svgRef = useRef(null);
 
-  useEffect(() => draw(), [items, clicked.worldline, mode]);
+  useEffect(() => draw(), [items, clicked, mode, velocity]);
 
   const mouseoverWorldLine = (event, worldline: WorldLine) => {
     if (mode === "idle") {
