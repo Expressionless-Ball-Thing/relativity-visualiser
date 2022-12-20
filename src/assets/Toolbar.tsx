@@ -1,14 +1,10 @@
 import {
   Button,
   ButtonGroup,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
   Slider,
-  TextField,
   useMediaQuery,
 } from "@mui/material";
-import { WorldLine } from "../App";
+import { Clicked, CustomToolbar, WorldLine } from "./types_interfaces";
 
 type interval = "Timelike" | "Spacelike" | "Lightlike";
 
@@ -36,9 +32,9 @@ export const ToolBar = ({
   velocity,
   recenter,
   setItems,
-}) => {
+}: CustomToolbar) => {
   const matches = useMediaQuery("(min-width:300px)");
-  const determineNewVelocity = (clicked) => {
+  const determineNewVelocity = (clicked: Clicked) => {
     let interval: WorldLine;
 
     if (clicked.event === null && clicked.worldline === null) {
@@ -51,7 +47,7 @@ export const ToolBar = ({
         target: clicked.event,
       };
     } else {
-      interval = clicked.worldline;
+      interval = clicked.worldline!;
     }
 
     const intervalType = determineIntervalType(interval);
@@ -137,8 +133,8 @@ export const ToolBar = ({
             min={-1}
             max={1}
             step={0.01}
-            value={parseFloat(velocity)}
-            onChange={(_, newValue) => setVelocity(newValue)}
+            value={velocity}
+            onChange={(_, newValue) => setVelocity(newValue as number)}
           />
           <input
             type="text"
@@ -147,7 +143,7 @@ export const ToolBar = ({
             id="Eventname"
             placeholder="Enter a number between -1 and 1"
             value={velocity}
-            onChange={(event) => { if (event.target.value < 1 && event.target.value > -1) {setVelocity(event.target.value)}}}
+            onChange={(event: any) => { if (event.target.value < 1 && event.target.value > -1) {setVelocity(event.target.value)}}}
           />
         </fieldset>
     </div>

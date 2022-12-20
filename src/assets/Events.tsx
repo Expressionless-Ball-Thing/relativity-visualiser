@@ -1,8 +1,9 @@
 import { Tooltip } from "@mui/material";
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
-import { EventNode } from "../App";
+import { EventNode } from "./types_interfaces";
 import { determineIntervalType } from "./Toolbar";
+import { CustomEvents, WorldLine } from "./types_interfaces";
 
 const colorScale = d3.schemePaired;
 
@@ -18,11 +19,11 @@ const Events = ({
   setMode,
   setItems,
   velocity,
-}) => {
+}: CustomEvents) => {
   const svgRef = useRef(null);
   useEffect(() => draw(), [items, clicked, mode, velocity]);
 
-  const mouseoverEvent = (event, component) => {
+  const mouseoverEvent = (event: any, component: EventNode) => {
     event.target.style.stroke = "black";
     event.target.style.strokeWidth = 2;
     event.target.style.cursor = "pointer";
@@ -32,25 +33,25 @@ const Events = ({
         .attr("r", radius * 1.5);
     } else if (mode === "idle") {
       d3.selectAll(".transformed_stuff circle")
-        .filter((d) => d.id === component.id)
+        .filter((d: any) => d.id === component.id)
         .transition()
         .style("fill", "black");
     }
   };
 
-  const mouseleaveEvent = (event, component) => {
+  const mouseleaveEvent = (event: any, component: EventNode) => {
     event.target.style = "";
     document.body.style.cursor = "";
     if (mode === "dragLine") {
       d3.select(event.target).transition().attr("r", radius);
     }
     d3.selectAll(".transformed_stuff circle")
-      .filter((d) => d.id === component.id)
+      .filter((d: any) => d.id === component.id)
       .transition()
       .style("fill", "#cbd1d8");
   };
 
-  const mousedownEvent = (event) => {
+  const mousedownEvent = (event: any) => {
     setClicked({worldline: null, event: event });
     if (mode === "idle") {
       setMode("dragLine");
@@ -59,9 +60,9 @@ const Events = ({
 
   const mouseupEvent = (event: EventNode) => {
     const tempWorldlines = [...items.worldlines];
-    const newline: object = {
+    const newline: WorldLine = {
       name: "",
-      source: clicked.event,
+      source: clicked.event!,
       target: event,
     };
     const inplaceWorldLine = tempWorldlines.filter(

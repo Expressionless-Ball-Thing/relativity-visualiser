@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import * as d3 from "d3";
+import { Clicked, Mode } from "./types_interfaces";
+import { ScaleLinear } from "d3";
 
-const DragLine = ({ mode, clicked, SpaceScale, TimeScale }) => {
+const DragLine = ({ mode, clicked, SpaceScale, TimeScale }: {mode: Mode, clicked: Clicked, SpaceScale: ScaleLinear<Number, Number, never>, TimeScale: ScaleLinear<Number, Number, never>}) => {
   const [mouseEvent, setmouseEvent] = useState({ x: 0, y: 0 });
 
   useEffect(() => {

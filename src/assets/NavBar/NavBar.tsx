@@ -1,4 +1,4 @@
-import { AppBar, Button, ButtonGroup, IconButton, Link, Toolbar, Tooltip, Typography } from "@mui/material";
+import { AppBar, IconButton, Link, Toolbar, Tooltip, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import GitHubIcon from "@mui/icons-material/GitHub"
 import CustomModal from "./CustomModal";
