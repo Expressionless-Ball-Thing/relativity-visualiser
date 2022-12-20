@@ -12,7 +12,7 @@ const NavbarBox = styled('div')`
 `
 
 const StyledNavBar = styled(AppBar)`
-  position: static;
+  position: fixed;
 `;
 
 const Title = styled(Typography)`

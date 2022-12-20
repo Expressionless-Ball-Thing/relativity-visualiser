@@ -1,9 +1,27 @@
 import "./App.css";
 import { useState } from "react";
 import { ToolBar } from "./assets/Toolbar";
-import  Grid from "./assets/Grid";
+import Grid from "./assets/Grid";
 import NavBar from "./assets/NavBar/NavBar";
-import { Clicked, EventNode, Items, Mode, WorldLine } from "./assets/types_interfaces";
+import {
+  Clicked,
+  EventNode,
+  Items,
+  Mode,
+  WorldLine,
+} from "./assets/types_interfaces";
+import { Box } from "@mui/material";
+import { styled } from "@mui/system";
+
+const ContentWrap = styled(Box)`
+  text-align: center;
+  padding: 64px;
+`;
+
+const GridWrap = styled(Box)`
+  display: block;
+  margin: auto 20px;
+`;
 
 const App = () => {
   const [clicked, setClicked] = useState<Clicked>({
@@ -18,13 +36,13 @@ const App = () => {
     if (clicked.event !== null) {
       setItems({
         events: items.events.filter(
-          (event: EventNode) => (event.id !== clicked.event!.id)
+          (event: EventNode) => event.id !== clicked.event!.id
         ),
         worldlines: items.worldlines.filter(
           (worldline: WorldLine) =>
-            (worldline.source.id !== clicked.event!.id &&
-            worldline.target.id !== clicked.event!.id)
-        )
+            worldline.source.id !== clicked.event!.id &&
+            worldline.target.id !== clicked.event!.id
+        ),
       });
     } else {
       setItems({
@@ -47,22 +65,23 @@ const App = () => {
       for (let i: number = 0; i < tempEvents.length; i++) {
         if (tempEvents[i].id === clicked.event.id) {
           tempEvents[i].name = event.target!.value;
-          setItems({...items, events: tempEvents})
+          setItems({ ...items, events: tempEvents });
           return;
         }
       }
     } else if (clicked.worldline !== null) {
       let tempWorldlines = [...items.worldlines];
       for (let i: number = 0; i < tempWorldlines.length; i++) {
-        if (tempWorldlines[i].source === clicked.worldline.source && tempWorldlines[i].target === clicked.worldline.target) {
+        if (
+          tempWorldlines[i].source === clicked.worldline.source &&
+          tempWorldlines[i].target === clicked.worldline.target
+        ) {
           tempWorldlines[i].name = event.target!.value;
-          setItems({...items, worldlines: tempWorldlines})
+          setItems({ ...items, worldlines: tempWorldlines });
           return;
         }
       }
     }
-
-    ;
   };
   const lorentz_factor = 1 / Math.sqrt(1 - Math.pow(velocity, 2));
   const transform = (event: EventNode): EventNode => {
@@ -79,7 +98,7 @@ const App = () => {
     return {
       source: transform(worldline.source),
       target: transform(worldline.target),
-      name: worldline.name
+      name: worldline.name,
     };
   });
 
@@ -92,28 +111,33 @@ const App = () => {
   return (
     <div className="App">
       <NavBar />
-      <ToolBar
-        clicked={clicked}
-        deleteStuff={deleteStuff}
-        updateEvent={updateEvent}
-        setVelocity={setVelocity}
-        velocity={velocity}
-        recenter={recenter}
-        setItems={setItems}
-      />
-      <div className="Grid">
-      <Grid
-        deleteStuff={deleteStuff}
-        items={items}
-        transformedItems={{events: transformedEvents, worldlines: transformedWorldlines}}
-        clicked={clicked}
-        setClicked={setClicked}
-        setItems={setItems}
-        mode={mode}
-        setMode={setMode}
-        velocity={velocity}
-      />
-      </div>
+      <ContentWrap>
+        <ToolBar
+          clicked={clicked}
+          deleteStuff={deleteStuff}
+          updateEvent={updateEvent}
+          setVelocity={setVelocity}
+          velocity={velocity}
+          recenter={recenter}
+          setItems={setItems}
+        />
+        <GridWrap>
+          <Grid
+            deleteStuff={deleteStuff}
+            items={items}
+            transformedItems={{
+              events: transformedEvents,
+              worldlines: transformedWorldlines,
+            }}
+            clicked={clicked}
+            setClicked={setClicked}
+            setItems={setItems}
+            mode={mode}
+            setMode={setMode}
+            velocity={velocity}
+          />
+        </GridWrap>
+      </ContentWrap>
     </div>
   );
 };
