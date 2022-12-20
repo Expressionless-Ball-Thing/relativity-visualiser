@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
-import { EventNode, WorldLine } from "../App";
+import { CustomGrid, EventNode } from "./types_interfaces";
 import DragLine from "./DragLine";
 import Events from "./Events";
 import { SpaceAxis } from "./SpaceAxis";
@@ -19,7 +19,7 @@ const width: number = 900;
 const height: number = 900;
 const margin = { top: 0, right: 0, bottom: 0, left: 0 };
 
-export const Grid = ({
+const Grid = ({
   items,
   clicked,
   setClicked,
@@ -29,16 +29,16 @@ export const Grid = ({
   velocity,
   deleteStuff,
   transformedItems,
-}) => {
-  const maxval = parseFloat(
-    d3.max([
-      d3.max(transformedItems.events.map((d: EventNode) => d.x)),
-      d3.max(transformedItems.events.map((d: EventNode) => d.t)),
-      d3.max(items.events.map((d: EventNode) => d.x)),
-      d3.max(items.events.map((d: EventNode) => d.t)),
+}: CustomGrid) => {
+  const maxval = 
+    Math.max(...[
+      Math.max(...transformedItems.events.map((d: EventNode) => d.x)),
+      Math.max(...transformedItems.events.map((d: EventNode) => d.t)),
+      Math.max(...items.events.map((d: EventNode) => d.x)),
+      Math.max(...items.events.map((d: EventNode) => d.t)),
       10,
     ])
-  );
+  ;
 
   const getBound = () => {
     const [digit, exponent] = [
@@ -70,7 +70,7 @@ export const Grid = ({
     };
   }, [clicked, items, transformedItems]);
 
-  const addEvent = (event) => {
+  const addEvent = (event: any) => {
     let currentTargetRect = event.currentTarget.getBoundingClientRect();
     let left = event.clientX - currentTargetRect.left;
     let top = event.clientY - currentTargetRect.top;
@@ -102,7 +102,7 @@ export const Grid = ({
     setItems({ ...items, events: tempEvents });
   };
 
-  const handleClick = (event) => {
+  const handleClick = (event: any) => {
     switch (event.detail) {
       case 2:
         addEvent(event);
@@ -112,7 +112,7 @@ export const Grid = ({
     }
   };
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event: any) => {
     if (event.target.tagName === "INPUT") return;
     if (["Backspace", "Delete"].includes(event.key)) {
       deleteStuff();
@@ -177,3 +177,5 @@ export const Grid = ({
     </>
   );
 };
+
+export default Grid;

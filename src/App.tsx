@@ -1,33 +1,9 @@
 import "./App.css";
 import { useState } from "react";
 import { ToolBar } from "./assets/Toolbar";
-import { Grid } from "./assets/Grid";
+import  Grid from "./assets/Grid";
 import NavBar from "./assets/NavBar/NavBar";
-
-export interface EventNode {
-  id: number;
-  name: String;
-  x: number;
-  t: number;
-}
-
-export interface WorldLine {
-  name: String;
-  source: EventNode;
-  target: EventNode;
-}
-
-export interface Items {
-  events: EventNode[];
-  worldlines: WorldLine[];
-}
-
-export interface Clicked {
-  event: EventNode | null;
-  worldline: WorldLine | null;
-}
-
-type Mode = "idle" | "dragLine" | "dragEvent";
+import { Clicked, EventNode, Items, Mode, WorldLine } from "./assets/types_interfaces";
 
 const App = () => {
   const [clicked, setClicked] = useState<Clicked>({
@@ -42,12 +18,12 @@ const App = () => {
     if (clicked.event !== null) {
       setItems({
         events: items.events.filter(
-          (event: EventNode) => (event.id !== clicked.event.id)
+          (event: EventNode) => (event.id !== clicked.event!.id)
         ),
         worldlines: items.worldlines.filter(
           (worldline: WorldLine) =>
-            (worldline.source.id !== clicked.event.id &&
-            worldline.target.id !== clicked.event.id)
+            (worldline.source.id !== clicked.event!.id &&
+            worldline.target.id !== clicked.event!.id)
         )
       });
     } else {
@@ -55,22 +31,22 @@ const App = () => {
         ...items,
         worldlines: items.worldlines.filter((worldline: WorldLine) => {
           return !(
-            (worldline.source.id === clicked.worldline.source.id &&
-              worldline.target.id === clicked.worldline.target.id) ||
-            (worldline.source.id === clicked.worldline.target.id &&
-              worldline.target.id === clicked.worldline.source.id)
+            (worldline.source.id === clicked.worldline!.source.id &&
+              worldline.target.id === clicked.worldline!.target.id) ||
+            (worldline.source.id === clicked.worldline!.target.id &&
+              worldline.target.id === clicked.worldline!.source.id)
           );
         }),
       });
     }
   };
 
-  const updateEventName = (event: Event) => {
+  const updateEvent = (event: any) => {
     if (clicked.event !== null) {
       let tempEvents = [...items.events];
       for (let i: number = 0; i < tempEvents.length; i++) {
         if (tempEvents[i].id === clicked.event.id) {
-          tempEvents[i].name = event.target.value;
+          tempEvents[i].name = event.target!.value;
           setItems({...items, events: tempEvents})
           return;
         }
@@ -79,7 +55,7 @@ const App = () => {
       let tempWorldlines = [...items.worldlines];
       for (let i: number = 0; i < tempWorldlines.length; i++) {
         if (tempWorldlines[i].source === clicked.worldline.source && tempWorldlines[i].target === clicked.worldline.target) {
-          tempWorldlines[i].name = event.target.value;
+          tempWorldlines[i].name = event.target!.value;
           setItems({...items, worldlines: tempWorldlines})
           return;
         }
@@ -119,7 +95,7 @@ const App = () => {
       <ToolBar
         clicked={clicked}
         deleteStuff={deleteStuff}
-        updateEvent={updateEventName}
+        updateEvent={updateEvent}
         setVelocity={setVelocity}
         velocity={velocity}
         recenter={recenter}

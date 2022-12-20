@@ -1,10 +1,10 @@
 import { Tooltip } from "@mui/material";
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
-import { EventNode, WorldLine } from "../App";
 import { determineIntervalType } from "./Toolbar";
+import { EventNode, CustomTransformed, WorldLine } from "./types_interfaces";
 
-const Transformed = ({ transformedItems, velocity, SpaceScale, TimeScale}) => {
+const Transformed = ({ transformedItems, velocity, SpaceScale, TimeScale}: CustomTransformed) => {
   const svgRef = useRef(null);
   useEffect(() => draw(), [transformedItems, velocity]);
 
@@ -78,7 +78,7 @@ const Transformed = ({ transformedItems, velocity, SpaceScale, TimeScale}) => {
       .duration(500)
       .attr(
         "d",
-        (d) =>
+        (d: WorldLine) =>
           `M${SpaceScale(d.source.x)},${TimeScale(d.source.t)} L${SpaceScale(
             d.target.x
           )},${TimeScale(d.target.t)}`

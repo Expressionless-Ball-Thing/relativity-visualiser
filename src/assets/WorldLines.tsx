@@ -1,4 +1,4 @@
-import { WorldLine } from "../App";
+import { CustomWorldLine, WorldLine } from "./types_interfaces";
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
 import { Tooltip } from "@mui/material";
@@ -11,20 +11,20 @@ const WorldLines = ({
   clicked,
   mode,
   velocity
-}) => {
+}: CustomWorldLine) => {
   const svgRef = useRef(null);
 
   useEffect(() => draw(), [items, clicked, mode, velocity]);
 
-  const mouseoverWorldLine = (event, worldline: WorldLine) => {
+  const mouseoverWorldLine = (event: any, worldline: WorldLine) => {
     if (mode === "idle") {
-      event.target.style.stroke = "red";
-      event.target.style.strokeWidth = 5;
-      event.target.style.cursor = "pointer";
+      event.target!.style.stroke = "red";
+      event.target!.style.strokeWidth = 5;
+      event.target!.style.cursor = "pointer";
 
       d3.selectAll(".transformed_stuff path")
         .filter(
-          (d) =>
+          (d: any) =>
             d.source.id === worldline.source.id &&
             d.target.id === worldline.target.id
         )
@@ -33,15 +33,15 @@ const WorldLines = ({
     }
   };
 
-  const mouseleaveWorldLine = (event, worldline: WorldLine) => {
+  const mouseleaveWorldLine = (event: any, worldline: WorldLine) => {
     if (mode === "idle") {
       event.stopPropagation();
-      event.target.style = "";
+      event.target!.style = "";
       document.body.style.cursor = "";
 
       d3.selectAll(".transformed_stuff path")
         .filter(
-          (d) =>
+          (d: any) =>
             d.source.id === worldline.source.id &&
             d.target.id === worldline.target.id
         )
@@ -94,7 +94,7 @@ const WorldLines = ({
       .duration(500)
       .attr(
         "d",
-        (d) =>
+        (d: WorldLine) =>
           `M${SpaceScale(d.source.x)},${TimeScale(d.source.t)} L${SpaceScale(
             d.target.x
           )},${TimeScale(d.target.t)}`
