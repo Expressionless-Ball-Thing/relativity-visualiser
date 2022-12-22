@@ -13,13 +13,23 @@ import {
 import { Box } from "@mui/material";
 import { styled } from "@mui/system";
 
+
+const AppBox = styled(Box)`
+  text-align: center;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  display: flex;
+  align-items: center;
+`
+
 const ContentWrap = styled(Box)`
+display: block;
   text-align: center;
   padding: 64px;
 `;
 
 const GridWrap = styled(Box)`
-  display: block;
+  justify-items: center;
+  align-items; center;
   margin: auto 20px;
 `;
 
@@ -109,7 +119,7 @@ const App = () => {
   };
 
   return (
-    <div className="App">
+    <AppBox>
       <NavBar />
       <ContentWrap>
         <ToolBar
@@ -138,7 +148,7 @@ const App = () => {
           />
         </GridWrap>
       </ContentWrap>
-    </div>
+    </AppBox>
   );
 };
 

@@ -7,6 +7,7 @@ import { SpaceAxis } from "./SpaceAxis";
 import { TimeAxis } from "./TimeAxis";
 import Transformed from "./Transformed";
 import WorldLines from "./WorldLines";
+import { Box } from "@mui/material";
 
 export interface Margin {
   top: number;
@@ -120,7 +121,7 @@ const Grid = ({
   };
 
   return (
-    <>
+    <Box width={'100%'}>
       <svg
         width={width}
         height={height}
@@ -174,7 +175,7 @@ const Grid = ({
           setItems={setItems}
         />
       </svg>
-    </>
+    </Box>
   );
 };
 

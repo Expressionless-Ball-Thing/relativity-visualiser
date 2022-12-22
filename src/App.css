@@ -1,8 +1,4 @@
-.App {
-  display: block;
-  text-align: center;
-  font-family: "Roboto","Helvetica","Arial",sans-serif;
-}
+
 
 input[type="text"] {
   height: 24px;
@@ -10,7 +6,7 @@ input[type="text"] {
 }
 
 .Grid {
-  display: block;
+  display: flex;
   margin: auto 20px;
 }
 
@@ -66,16 +62,6 @@ input[type="text"] {
   box-shadow: 10px 10px 8px #888888;
 }
 
-
-.ToolBar {
-  margin-top: 20px;
-  margin-bottom: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
 .Namebar {
   display: flex;
   column-gap: 10px;
@@ -93,7 +79,7 @@ input[type="text"] {
 
 .VelocityBar {
   margin: 10px 0;
-  width: 30%;
+  width: 70%;
   border-radius: 5px;
 }
 
@@ -119,7 +105,6 @@ input[type="text"] {
 
 .label_type {
   margin: auto auto;
-  width: 60px;
   font-size: 0.8125rem;
 }
 
