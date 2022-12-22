@@ -15,19 +15,17 @@ import { styled } from "@mui/system";
 
 
 const AppBox = styled(Box)`
+  display: flex;
+  flex-direction: column;
   text-align: center;
   font-family: "Roboto","Helvetica","Arial",sans-serif;
-  display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 64px;
 `
 
-const ContentWrap = styled(Box)`
-display: block;
-  text-align: center;
-  padding: 64px;
-`;
-
 const GridWrap = styled(Box)`
+  display: block;
   justify-items: center;
   align-items; center;
   margin: auto 20px;
@@ -121,7 +119,6 @@ const App = () => {
   return (
     <AppBox>
       <NavBar />
-      <ContentWrap>
         <ToolBar
           clicked={clicked}
           deleteStuff={deleteStuff}
@@ -147,7 +144,6 @@ const App = () => {
             velocity={velocity}
           />
         </GridWrap>
-      </ContentWrap>
     </AppBox>
   );
 };

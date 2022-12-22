@@ -30,8 +30,6 @@ export const determineIntervalType = (worldLine: WorldLine): interval => {
   }
 };
 
-
-
 const VelocityInput = styled(Input)`
   width: 100%;
 `;
@@ -39,7 +37,7 @@ const VelocityInput = styled(Input)`
 const ToolBarContainer = styled(Container)`
   display: flex;
   justify-content: center;
-`
+`;
 
 const StyledToolBar = styled(Box)`
   border: 1px solid turquoise;
@@ -53,8 +51,7 @@ const StyledToolBar = styled(Box)`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-`
-
+`;
 
 export const ToolBar = ({
   clicked,
@@ -101,98 +98,98 @@ export const ToolBar = ({
 
   return (
     <ToolBarContainer>
-    <StyledToolBar>
-      <Box width={'90%'}>
-        <Box>
-          <Typography variant="subtitle2" color="blue" className="label_type">
-            {`Type: `}
-            {clicked.event !== null
-              ? `Event (${determineIntervalType({
-                  name: "",
-                  source: { id: 0, name: "", x: 0, t: 0 },
-                  target: clicked.event,
-                })})`
-              : clicked.worldline !== null
-              ? `${determineIntervalType(clicked.worldline)} interval`
-              : "N/A"}
-          </Typography>
-        </Box>
-        <Box>
-          {`Name: `}
-          <Input
-            type="text"
-            value={
-              clicked.event !== null
-                ? clicked.event.name
+      <StyledToolBar>
+        <Box width={"90%"}>
+          <Box>
+            <Typography variant="subtitle2" color="blue" className="label_type">
+              {`Type: `}
+              {clicked.event !== null
+                ? `Event (${determineIntervalType({
+                    name: "",
+                    source: { id: 0, name: "", x: 0, t: 0 },
+                    target: clicked.event,
+                  })})`
                 : clicked.worldline !== null
-                ? clicked.worldline.name
-                : ""
-            }
-            onChange={updateEvent}
-            disabled={
-              clicked.event === null && clicked.worldline === null
-                ? true
-                : false
-            }
-          />
+                ? `${determineIntervalType(clicked.worldline)} interval`
+                : "N/A"}
+            </Typography>
+          </Box>
+          <Box>
+            {`Name: `}
+            <Input
+              type="text"
+              value={
+                clicked.event !== null
+                  ? clicked.event.name
+                  : clicked.worldline !== null
+                  ? clicked.worldline.name
+                  : ""
+              }
+              onChange={updateEvent}
+              disabled={
+                clicked.event === null && clicked.worldline === null
+                  ? true
+                  : false
+              }
+            />
 
-          <Button variant="outlined" onClick={deleteStuff} size="small">
-            delete
-          </Button>
+            <Button variant="outlined" onClick={deleteStuff} size="small">
+              delete
+            </Button>
+          </Box>
         </Box>
-      </Box>
-      <Box>
-        <ButtonGroup
-          variant="outlined"
-          aria-label="outlined button group"
-          size="small"
-        >
-          <Button
-            className="transform"
-            onClick={() => determineNewVelocity(clicked)}
+        <Box>
+          <ButtonGroup
+            variant="outlined"
+            aria-label="outlined button group"
+            size="small"
           >
-            Transform
-          </Button>
-          <Button className="recenter" onClick={recenter}>
-            Recenter
-          </Button>
-          <Button
-            className="clear"
-            onClick={() => {
-              setItems({ events: [], worldlines: [] });
-              setVelocity(0);
+            <Button
+              className="transform"
+              onClick={() => determineNewVelocity(clicked)}
+            >
+              Transform
+            </Button>
+            <Button className="recenter" onClick={recenter}>
+              Recenter
+            </Button>
+            <Button
+              className="clear"
+              onClick={() => {
+                setItems({ events: [], worldlines: [] });
+                setVelocity(0);
+              }}
+            >
+              Clear Grid
+            </Button>
+          </ButtonGroup>
+        </Box>
+        <fieldset className="VelocityBar">
+          <legend>Velocity Settings</legend>
+          <Slider
+            size="small"
+            defaultValue={0}
+            aria-label="Small"
+            valueLabelDisplay="auto"
+            min={-1}
+            max={1}
+            step={0.01}
+            value={velocity}
+            onChange={(_, newValue) => setVelocity(newValue as number)}
+          />
+          <VelocityInput
+            type="number"
+            id="Eventname"
+            placeholder="Enter a number between -1 and 1"
+            value={velocity}
+            onChange={(event: any) => {
+              if (event.target.value < 1 && event.target.value > -1) {
+                setVelocity(event.target.value);
+              }
             }}
-          >
-            Clear Grid
-          </Button>
-        </ButtonGroup>
-      </Box>
-      <fieldset className="VelocityBar">
-        <legend>Velocity Settings</legend>
-        <Slider
-          size="small"
-          defaultValue={0}
-          aria-label="Small"
-          valueLabelDisplay="auto"
-          min={-1}
-          max={1}
-          step={0.01}
-          value={velocity}
-          onChange={(_, newValue) => setVelocity(newValue as number)}
-        />
-        <VelocityInput
-          type="number"
-          id="Eventname"
-          placeholder="Enter a number between -1 and 1"
-          value={velocity}
-          onChange={(event: any) => {
-            if (event.target.value < 1 && event.target.value > -1) {
-              setVelocity(event.target.value);
-            }
-          }}
-        />
-      </fieldset>
-    </StyledToolBar>
+          />
+        </fieldset>
+      </StyledToolBar>
     </ToolBarContainer>
   );
 };
