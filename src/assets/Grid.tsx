@@ -32,10 +32,10 @@ const Grid = ({
 }: CustomGrid) => {
   const maxval = 
     Math.max(...[
-      Math.max(...transformedItems.events.map((d: EventNode) => d.x)),
-      Math.max(...transformedItems.events.map((d: EventNode) => d.t)),
-      Math.max(...items.events.map((d: EventNode) => d.x)),
-      Math.max(...items.events.map((d: EventNode) => d.t)),
+      Math.max(...transformedItems.events.map((d: EventNode) => Math.abs(d.x))),
+      Math.max(...transformedItems.events.map((d: EventNode) => Math.abs(d.t))),
+      Math.max(...items.events.map((d: EventNode) => Math.abs(d.x))),
+      Math.max(...items.events.map((d: EventNode) => Math.abs(d.t))),
       10,
     ])
   ;
