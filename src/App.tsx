@@ -8,10 +8,12 @@ import {
   EventNode,
   Items,
   Mode,
+  TransformType,
   WorldLine,
 } from "./assets/types_interfaces";
 import { Box } from "@mui/material";
 import { styled } from "@mui/system";
+import { transformItems } from "./assets/helpers";
 
 
 const AppBox = styled(Box)`
@@ -39,6 +41,7 @@ const App = () => {
   const [items, setItems] = useState<Items>({ events: [], worldlines: [] });
   const [mode, setMode] = useState<Mode>("idle");
   const [velocity, setVelocity] = useState<number>(0);
+  const [transformType, setTransformType] = useState<TransformType>("lorentz")
 
   const deleteStuff = () => {
     if (clicked.event !== null) {
@@ -91,27 +94,9 @@ const App = () => {
       }
     }
   };
-  const lorentz_factor = 1 / Math.sqrt(1 - Math.pow(velocity, 2));
-  const transform = (event: EventNode): EventNode => {
-    const tempEvent = { ...event };
-    tempEvent.x = lorentz_factor * (event.x - velocity * event.t);
-    tempEvent.t = lorentz_factor * (event.t - velocity * event.x);
-    return tempEvent;
-  };
-
-  const transformedEvents = items.events.map((event) => {
-    return transform(event);
-  });
-  const transformedWorldlines = items.worldlines.map((worldline) => {
-    return {
-      source: transform(worldline.source),
-      target: transform(worldline.target),
-      name: worldline.name,
-    };
-  });
 
   const recenter = () => {
-    setItems({ events: transformedEvents, worldlines: transformedWorldlines });
+    setItems(transformItems(items, velocity, transformType));
     setClicked({ event: null, worldline: null });
     setVelocity(0);
   };
@@ -127,15 +112,13 @@ const App = () => {
           velocity={velocity}
           recenter={recenter}
           setItems={setItems}
+          setTransformType={setTransformType}
         />
         <GridWrap>
           <Grid
             deleteStuff={deleteStuff}
             items={items}
-            transformedItems={{
-              events: transformedEvents,
-              worldlines: transformedWorldlines,
-            }}
+            transformedItems={transformItems(items, velocity, transformType)}
             clicked={clicked}
             setClicked={setClicked}
             setItems={setItems}

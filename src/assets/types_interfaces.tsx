@@ -2,6 +2,8 @@ import { ScaleLinear } from "d3";
 
 export type Mode = "idle" | "dragLine" | "dragEvent";
 
+export type TransformType = "galilean" | 'lorentz'
+
 export interface EventNode {
   id: number;
   name: string;
@@ -74,4 +76,5 @@ export interface CustomToolbar {
   velocity: number,
   recenter: () => void,
   setItems: React.Dispatch<React.SetStateAction<Items>>,
+  setTransformType: React.Dispatch<React.SetStateAction<TransformType>>,
 }

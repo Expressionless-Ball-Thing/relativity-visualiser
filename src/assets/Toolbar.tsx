@@ -5,12 +5,15 @@ import {
   ButtonGroup,
   Container,
   Input,
+  Menu,
+  MenuItem,
   Slider,
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { Clicked, CustomToolbar, WorldLine } from "./types_interfaces";
+import { Clicked, CustomToolbar, TransformType, WorldLine } from "./types_interfaces";
 import { styled } from "@mui/system";
+import { useState } from "react";
 
 type interval = "Timelike" | "Spacelike" | "Lightlike";
 
@@ -61,10 +64,33 @@ export const ToolBar = ({
   velocity,
   recenter,
   setItems,
+  setTransformType
 }: CustomToolbar) => {
-  const matches = useMediaQuery("(min-width:600px)");
-  const determineNewVelocity = (clicked: Clicked) => {
+
+  const determineNewVelocity = (clicked: Clicked, transform: TransformType) => {
+
     let interval: WorldLine;
+
+    if (transform === "galilean") {
+      if (clicked.event === null && clicked.worldline === null) {
+        alert("Nothing is selected");
+        return;
+      } else if (clicked.event !== null) {
+        interval = {
+          name: "",
+          source: { id: 0, name: "", x: 0, t: 0 },
+          target: clicked.event,
+        };
+      } else {
+        interval = clicked.worldline!;
+      }
+      setVelocity(
+        (interval.target.x - interval.source.x) /
+          (interval.target.t - interval.source.t)
+      );
+      setTransformType("galilean")
+      return;
+    }
 
     if (clicked.event === null && clicked.worldline === null) {
       alert("Nothing is selected");
@@ -94,7 +120,18 @@ export const ToolBar = ({
     } else if (intervalType === "Lightlike") {
       alert("This interval is Lightlike");
     }
+    setTransformType("lorentz")
   };
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
 
   return (
     <ToolBarContainer>
@@ -139,17 +176,51 @@ export const ToolBar = ({
           </Box>
         </Box>
         <Box>
+          <Button
+            id="transform-menu-button"
+            aria-controls={open ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
+          >
+            Transform mode
+          </Button>
+          <Menu 
+            id="transform-menu"
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={() => setTransformType("galilean")}>Galiean</MenuItem>
+            <MenuItem onClick={() => setTransformType("lorentz")}>Lorentz</MenuItem>
+          </Menu>
+          <ButtonGroup
+            variant="outlined"
+            aria-label="outlined button group"
+            size="small"          
+          >
+            <Button
+              className="transform"
+              onClick={() => determineNewVelocity(clicked, "lorentz")}
+            >
+              Lorentz Transform
+            </Button>
+            <Button
+              className="transform"
+              onClick={() => determineNewVelocity(clicked, "galilean")}
+            >
+              Galilean Transform
+            </Button>
+          </ButtonGroup>
+
           <ButtonGroup
             variant="outlined"
             aria-label="outlined button group"
             size="small"
           >
-            <Button
-              className="transform"
-              onClick={() => determineNewVelocity(clicked)}
-            >
-              Transform
-            </Button>
             <Button className="recenter" onClick={recenter}>
               Recenter
             </Button>
