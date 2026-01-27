@@ -28,7 +28,6 @@ const WorldLines = ({
             d.source.id === worldline.source.id &&
             d.target.id === worldline.target.id
         )
-        .transition()
         .style("stroke", "black");
     }
   };
@@ -45,7 +44,6 @@ const WorldLines = ({
             d.source.id === worldline.source.id &&
             d.target.id === worldline.target.id
         )
-        .transition()
         .style("stroke", "turquoise");
     }
   };
@@ -90,8 +88,6 @@ const WorldLines = ({
         mouseleaveWorldLine(event, worldline)
       )
       .on("mousedown", (_, worldline) => mousedownWorldLine(worldline))
-      .transition()
-      .duration(500)
       .attr(
         "d",
         (d: WorldLine) =>

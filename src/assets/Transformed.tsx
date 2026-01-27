@@ -66,16 +66,12 @@ const Transformed = ({ transformedItems, velocity, SpaceScale, TimeScale}: Custo
       .data(transformedItems.worldlines)
 
     nodes
-      .transition()
-      .duration(500)
       .attr("cx", (event) => SpaceScale(event.x))
       .attr("cy", (event) => TimeScale(event.t))
       .attr("r", 5)
       .style("fill", "#cbd1d8")
 
-    paths
-      .transition()
-      .duration(500)
+    paths  
       .attr(
         "d",
         (d: WorldLine) =>

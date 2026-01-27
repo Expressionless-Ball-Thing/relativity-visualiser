@@ -29,12 +29,10 @@ const Events = ({
     event.target.style.cursor = "pointer";
     if (mode === "dragLine") {
       d3.select(event.target)
-        .transition()
         .attr("r", radius * 1.5);
     } else if (mode === "idle") {
       d3.selectAll(".transformed_stuff circle")
         .filter((d: any) => d.id === component.id)
-        .transition()
         .style("fill", "black");
     }
   };
@@ -43,16 +41,15 @@ const Events = ({
     event.target.style = "";
     document.body.style.cursor = "";
     if (mode === "dragLine") {
-      d3.select(event.target).transition().attr("r", radius);
+      d3.select(event.target).attr("r", radius);
     }
     d3.selectAll(".transformed_stuff circle")
       .filter((d: any) => d.id === component.id)
-      .transition()
       .style("fill", "#cbd1d8");
   };
 
   const mousedownEvent = (event: any) => {
-    setClicked({worldline: null, event: event });
+    setClicked({ worldline: null, event: event });
     if (mode === "idle") {
       setMode("dragLine");
     }
@@ -84,12 +81,12 @@ const Events = ({
       title={
         <>
           {d.name !== "" ? <><strong>{d.name}</strong>
-          <br/></> : ""}
+            <br /></> : ""}
           X: {Math.round(d.x * 1000) / 1000}
-          <br/>
+          <br />
           T: {Math.round(d.t * 1000) / 1000}
-          <br/>
-          {determineIntervalType({name: "", source: { id: 0, name: "", x: 0, t: 0 }, target: d})}
+          <br />
+          {determineIntervalType({ name: "", source: { id: 0, name: "", x: 0, t: 0 }, target: d })}
         </>
       }
       key={Math.pow(2, d.id).toString()}
@@ -112,8 +109,6 @@ const Events = ({
       )
       .on("mouseup", (_, event) => mouseupEvent(event))
       .on("mousedown", (_, event) => mousedownEvent(event))
-      .transition()
-      .duration(500)
       .attr("cx", (event) => SpaceScale(event.x))
       .attr("cy", (event) => TimeScale(event.t))
       .attr("fill", (event) => colorScale[event.id % colorScale.length])
